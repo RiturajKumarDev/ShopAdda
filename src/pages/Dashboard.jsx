@@ -1,6 +1,10 @@
 // Dashboard.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import Cookies from "js-cookie";
 import './Dashboard.css';
+import { addToCartServer } from '../services/cartService';
+import { getProductsToserver } from '../services/productService';
 
 const Dashboard = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -17,22 +21,40 @@ const Dashboard = () => {
         { id: 'sports', name: 'Sports', icon: '⚽' }
     ];
 
-    const products = [
-        { id: 1, name: 'iPhone 15 Pro', price: 999, originalPrice: 1299, discount: 23, rating: 4.8, sold: '2.5k', image: '📱', category: 'electronics' },
-        { id: 2, name: 'Nike Air Max', price: 89, originalPrice: 149, discount: 40, rating: 4.6, sold: '1.2k', image: '👟', category: 'fashion' },
-        { id: 3, name: 'Sony Headphones', price: 199, originalPrice: 299, discount: 33, rating: 4.7, sold: '3.1k', image: '🎧', category: 'electronics' },
-        { id: 4, name: 'Samsung Smart TV', price: 599, originalPrice: 899, discount: 33, rating: 4.5, sold: '890', image: '📺', category: 'electronics' },
-        { id: 5, name: 'Designer Handbag', price: 149, originalPrice: 299, discount: 50, rating: 4.4, sold: '2k', image: '👜', category: 'fashion' },
-        { id: 6, name: 'Coffee Maker', price: 79, originalPrice: 129, discount: 39, rating: 4.6, sold: '1.5k', image: '☕', category: 'home' },
-        { id: 7, name: 'Smart Watch', price: 249, originalPrice: 399, discount: 38, rating: 4.7, sold: '4.2k', image: '⌚', category: 'electronics' },
-        { id: 8, name: 'Running Shoes', price: 69, originalPrice: 119, discount: 42, rating: 4.5, sold: '3.8k', image: '👟', category: 'sports' },
-        { id: 9, name: 'Skincare Set', price: 49, originalPrice: 89, discount: 45, rating: 4.9, sold: '5k', image: '💆', category: 'beauty' },
-        { id: 10, name: 'Gaming Chair', price: 199, originalPrice: 349, discount: 43, rating: 4.4, sold: '1.1k', image: '💺', category: 'home' }
+    const productData = [
+        { _id: 1, name: 'iPhone 15 Pro', price: 999, originalPrice: 1299, discount: 23, rating: 4.8, sold: '2.5k', images: ['📱', '📱'], category: 'electronics' },
+        { _id: 2, name: 'Nike Air Max', price: 89, originalPrice: 149, discount: 40, rating: 4.6, sold: '1.2k', images: ['👟', '👟'], category: 'fashion' },
     ];
+
+    const [products, setProductData] = useState(productData);
+
+    useEffect(() => {
+        getProductsToserver()
+            .then((response) => {
+                if (response.ok)
+                    response.json().then((products) => {
+                        setProductData(products);
+                    });
+            });
+    }, []);
+
+    const handleAddToCart = async () => {
+        const user = JSON.parse(Cookies.get("userData") || null);
+        if (user) {
+            const response = await addToCartServer(user._id, product._id);
+            const data = await response.json();
+            if (response.ok)
+                alert(`Added ${quantity} item(s) to cart! 🛒`);
+            else
+                alert("Already added!!");
+        }
+        else
+            navigate("/login");
+    };
 
     const filteredProducts = activeCategory === 'all'
         ? products
-        : products.filter(p => p.category === activeCategory);
+        : products.filter(p => p.category.toLowerCase() === activeCategory.toLowerCase());
 
     return (
         <div className="dashboard">
@@ -42,12 +64,13 @@ const Dashboard = () => {
                     {/* Logo Section */}
                     <div className="logo-section">
                         <div className="logo">
-                            <span className="shop-icon">🛍️</span>
+                            {/* <span className="shop-icon">🛍️</span> */}
+                            <span className="shop-icon"><img src="shopAdda.png" alt="" /></span>
                             <span className="brand">Shop<span className="brand-accent">Adda</span></span>
                         </div>
                         <div className="deal-tag">
                             <span className="lightning">⚡</span>
-                            <span>HARDEALKAAEDDA</span>
+                            <span>HAR DEAL KAA ADDA</span>
                         </div>
                     </div>
 
@@ -74,7 +97,7 @@ const Dashboard = () => {
                                 <span className="dropdown-arrow">▼</span>
                             </button>
                             <div className="dropdown-menu">
-                                <a href="#">My Profile</a>
+                                <a href="profilePage" target='_main'>My Profile</a>
                                 <a href="#">Orders</a>
                                 <a href="#">Wishlist</a>
                                 <a href="#">Settings</a>
@@ -91,9 +114,11 @@ const Dashboard = () => {
                         </div>
 
                         <div className="seller-center">
-                            <button className="nav-link">
-                                <span>🏪</span> Seller Center
-                            </button>
+                            <a href="/uploadProduct" target='_main'>
+                                <button className="nav-link">
+                                    <span>🏪</span> Seller Center
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -119,7 +144,7 @@ const Dashboard = () => {
             <div className="hero-banner">
                 <div className="banner-content">
                     <div className="banner-text">
-                        <h1 className="animated-text">HARDEALKAA<span className="highlight">EDDA</span></h1>
+                        <h1 className="animated-text">HAR DEAL KAA<span className="highlight"> ADDA</span></h1>
                         <p className="banner-subtitle">Biggest Sale of the Year! Up to 80% Off</p>
                         <button className="shop-now-btn">Shop Now →</button>
                     </div>
@@ -159,20 +184,22 @@ const Dashboard = () => {
                 </div>
                 <div className="products-grid">
                     {filteredProducts.slice(0, 4).map(product => (
-                        <div className="product-card" key={product.id}>
-                            <div className="product-image">{product.image}</div>
-                            <div className="discount-badge">-{product.discount}%</div>
-                            <h3 className="product-name">{product.name}</h3>
-                            <div className="product-price">
-                                <span className="current-price">${product.price}</span>
-                                <span className="original-price">${product.originalPrice}</span>
+                        <Link to='productPage' state={{ product }} >
+                            <div className="product-card" key={product._id}>
+                                <img className="product-image" src={`${product.images.at(0)}`} alt="product.images" />
+                                <div className="discount-badge">-{product.discount}%</div>
+                                <h3 className="product-name">{product.name}</h3>
+                                <div className="product-price">
+                                    <span className="current-price">${product.price}</span>
+                                    <span className="original-price">${product.originalPrice}</span>
+                                </div>
+                                <div className="product-rating">
+                                    <span className="rating-stars">⭐ {product.rating}</span>
+                                    <span className="sold-count">({product.sold} sold)</span>
+                                </div>
+                                <button className="add-to-cart-btn" onClick={handleAddToCart}>Add to Cart</button>
                             </div>
-                            <div className="product-rating">
-                                <span className="rating-stars">⭐ {product.rating}</span>
-                                <span className="sold-count">({product.sold} sold)</span>
-                            </div>
-                            <button className="add-to-cart-btn">Add to Cart</button>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
@@ -185,23 +212,25 @@ const Dashboard = () => {
                 </div>
                 <div className="products-grid">
                     {filteredProducts.map(product => (
-                        <div className="product-card fade-in" key={product.id}>
-                            <div className="product-image">{product.image}</div>
-                            <div className="discount-badge">-{product.discount}%</div>
-                            <h3 className="product-name">{product.name}</h3>
-                            <div className="product-price">
-                                <span className="current-price">${product.price}</span>
-                                <span className="original-price">${product.originalPrice}</span>
+                        <Link to='productPage' state={{ product }} >
+                            <div className="product-card fade-in" key={product._id}>
+                                <img className="product-image" src={`${product.images.at(0)}`} alt="product.images" />
+                                <div className="discount-badge">-{product.discount}%</div>
+                                <h3 className="product-name">{product.name}</h3>
+                                <div className="product-price">
+                                    <span className="current-price">${product.price}</span>
+                                    <span className="original-price">${product.originalPrice}</span>
+                                </div>
+                                <div className="product-rating">
+                                    <span className="rating-stars">⭐ {product.rating}</span>
+                                    <span className="sold-count">({product.sold} sold)</span>
+                                </div>
+                                <button className="add-to-cart-btn" onClick={handleAddToCart}>
+                                    Add to Cart
+                                    <span className="cart-icon-small">🛒</span>
+                                </button>
                             </div>
-                            <div className="product-rating">
-                                <span className="rating-stars">⭐ {product.rating}</span>
-                                <span className="sold-count">({product.sold} sold)</span>
-                            </div>
-                            <button className="add-to-cart-btn">
-                                Add to Cart
-                                <span className="cart-icon-small">🛒</span>
-                            </button>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
