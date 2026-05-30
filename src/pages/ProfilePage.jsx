@@ -290,7 +290,6 @@ const ProfilePage = () => {
 
                             <div className="wishlist-grid">
                                 {cartlist.map(item => item._id ? (
-                                    console.log(item),
                                     <div className="wishlist-item" key={item._id}>
                                         <img className="item-image" src={item.images.at(0)} alt="item-image" />
                                         <div className="item-details">
@@ -305,13 +304,9 @@ const ProfilePage = () => {
                                         </div>
                                         <div className="item-actions">
                                             <Link to='../productPage' className="move-to-cart" state={{ product: item }} >View Details</Link>
-                                            <button
-                                                className="move-to-cart"
-                                                onClick={() => moveToCart(item._id)}
-                                                disabled={!item.inStock}
-                                            >
-                                                Order Now
-                                            </button>
+                                            <Link to='../OrderProductPage' state={{ products: [item] }}>
+                                                <button className="move-to-cart" >Order Now</button>
+                                            </Link>
                                             <button
                                                 className="remove-item"
                                                 onClick={() => removeFromCartlist(item._id)}
