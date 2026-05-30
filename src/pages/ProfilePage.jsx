@@ -120,13 +120,6 @@ const ProfilePage = () => {
                         Personal Info
                     </button>
                     <button
-                        className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('orders')}
-                    >
-                        <span className="tab-icon">📦</span>
-                        My Orders
-                    </button>
-                    <button
                         className={`tab-btn ${activeTab === 'cartlist' ? 'active' : ''}`}
                         onClick={() => setActiveTab('cartlist')}
                     >
@@ -239,41 +232,6 @@ const ProfilePage = () => {
                                         <p>{profileData.gender}</p>
                                     )}
                                 </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Orders Tab */}
-                    {activeTab === 'orders' && (
-                        <div className="orders-tab fade-in">
-                            <div className="orders-header">
-                                <h3>My Orders</h3>
-                                <div className="order-filters">
-                                    <button className="filter-btn active">All</button>
-                                    <button className="filter-btn">Processing</button>
-                                    <button className="filter-btn">Shipped</button>
-                                    <button className="filter-btn">Delivered</button>
-                                </div>
-                            </div>
-
-                            <div className="orders-list">
-                                {orders.map((order, index) => (
-                                    <div className="order-card" key={order.id}>
-                                        <div className="order-image">{order.image}</div>
-                                        <div className="order-details">
-                                            <div className="order-id">Order #{order.id}</div>
-                                            <div className="order-date">{order.date}</div>
-                                            <div className="order-items">{order.items} items</div>
-                                        </div>
-                                        <div className="order-status">
-                                            <span className={`status-badge ${order.status.toLowerCase()}`}>
-                                                {order.status}
-                                            </span>
-                                        </div>
-                                        <div className="order-total">{order.total}</div>
-                                        <button className="track-order-btn">Track Order</button>
-                                    </div>
-                                ))}
                             </div>
                         </div>
                     )}
