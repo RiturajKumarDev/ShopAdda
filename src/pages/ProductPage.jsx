@@ -28,6 +28,17 @@ const ProductPage = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    const scrolledTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    }
+
+    useEffect(() => {
+        scrolledTop();
+    }, []);
+
     const [relatedProducts, setRelatedProducts] = useState([
         { _id: 1, name: 'Wireless Earbuds', price: 89, rating: 4.5, images: ['🎧'], discount: 20 },
         { _id: 2, name: 'Smart Watch', price: 249, rating: 4.7, images: ['⌚'], discount: 15 },
@@ -83,19 +94,8 @@ const ProductPage = () => {
     return (
         <div className="product-page-container">
             <div className="product-page-wrapper">
-                {/* Breadcrumb - Responsive */}
-                <div className="breadcrumb">
-                    <a href="#">Home</a>
-                    <span>›</span>
-                    <a href="#">Electronics</a>
-                    <span>›</span>
-                    <a href="#">Headphones</a>
-                    <span>›</span>
-                    <span className="current">{!isMobile && product.name}</span>
-                </div>
-
                 {/* Product Main - Responsive Grid */}
-                <div className="product-main">
+                <div className="product-main" id='product-main'>
                     {/* Image Gallery - Responsive */}
                     <div className="product-gallery">
                         <div className="thumbnail-list">
@@ -212,9 +212,9 @@ const ProductPage = () => {
                             <button className="add-to-cart-btn" onClick={handleAddToCart}>
                                 🛒 Add to Cart
                             </button>
-                            <button className="buy-now-btn" onClick={handleBuyNow}>
-                                ⚡ Buy Now
-                            </button>
+                            <Link to='../OrderProductPage' state={{ products: [product] }}>
+                                <button className="buy-now-btn" >⚡ Buy Now</button>
+                            </Link>
                             <button
                                 className={`wishlist-btn ${isWishlisted ? 'active' : ''}`}
                                 onClick={() => setIsWishlisted(!isWishlisted)}
@@ -347,8 +347,7 @@ const ProductPage = () => {
                                 <div className="related-price">
                                     <span className="related-current">${product.price}</span>
                                 </div>
-                                <button className="related-btn">View Details</button>
-                                <Link to='../productPage' className="related-btn" state={{ product }} >View Details</Link>
+                                <Link to='../productPage' className="related-btn" state={{ product }} onClick={scrolledTop} >View Details</Link>
                             </div>
                         ))}
                     </div>

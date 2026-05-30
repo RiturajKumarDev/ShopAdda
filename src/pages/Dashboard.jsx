@@ -1,12 +1,13 @@
 // Dashboard.jsx
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import './Dashboard.css';
 import { addToCartServer } from '../services/cartService';
 import { getProductsToserver } from '../services/productService';
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [activeCategory, setActiveCategory] = useState('all');
     const [cartCount, setCartCount] = useState(3);
@@ -52,6 +53,11 @@ const Dashboard = () => {
             navigate("/login");
     };
 
+    const handleLogout = () => {
+        Cookies.remove("userData");
+        navigate("/login");
+    }
+
     const filteredProducts = activeCategory === 'all'
         ? products
         : products.filter(p => p.category.toLowerCase() === activeCategory.toLowerCase());
@@ -63,11 +69,13 @@ const Dashboard = () => {
                 <div className="nav-container">
                     {/* Logo Section */}
                     <div className="logo-section">
-                        <div className="logo">
-                            {/* <span className="shop-icon">🛍️</span> */}
-                            <span className="shop-icon"><img src="shopAdda.png" alt="" /></span>
-                            <span className="brand">Shop<span className="brand-accent">Adda</span></span>
-                        </div>
+                        <a href="https://shop-adda-pi.vercel.app/" target='_blank'>
+                            <div className="logo">
+                                {/* <span className="shop-icon">🛍️</span> */}
+                                <span className="shop-icon"><img src="shopAdda.png" alt="" /></span>
+                                <span className="brand">Shop<span className="brand-accent">Adda</span></span>
+                            </div>
+                        </a>
                         <div className="deal-tag">
                             <span className="lightning">⚡</span>
                             <span>HAR DEAL KAA ADDA</span>
@@ -98,16 +106,15 @@ const Dashboard = () => {
                             </button>
                             <div className="dropdown-menu">
                                 <a href="profilePage" target='_main'>My Profile</a>
-                                <a href="#">Orders</a>
-                                <a href="#">Wishlist</a>
-                                <a href="#">Settings</a>
+                                <a href="OrderPage">Orders</a>
+                                <a href="profilePage">Settings</a>
                                 <hr />
-                                <a href="#">Logout</a>
+                                <a href="#" role='button' onClick={handleLogout}>Logout</a>
                             </div>
                         </div>
 
                         <div className="cart-icon">
-                            <button className="nav-link">
+                            <button className="nav-link" onClick={() => navigate("profilePage")} >
                                 <span>🛒</span> Cart
                                 {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
                             </button>
@@ -132,7 +139,7 @@ const Dashboard = () => {
                                 className={`category-btn ${activeCategory === cat.id ? 'active' : ''}`}
                                 onClick={() => setActiveCategory(cat.id)}
                             >
-                                <span className="category-icon">{cat.icon}</span>
+                                <span className="category-icon" >{cat.icon}</span>
                                 <span>{cat.name}</span>
                             </button>
                         ))}
@@ -184,7 +191,7 @@ const Dashboard = () => {
                 </div>
                 <div className="products-grid">
                     {filteredProducts.slice(0, 4).map(product => (
-                        <Link to='productPage' state={{ product }} >
+                        <Link to='productPage' state={{ product }} key={product._id} >
                             <div className="product-card" key={product._id}>
                                 <img className="product-image" src={`${product.images.at(0)}`} alt="product.images" />
                                 <div className="discount-badge">-{product.discount}%</div>
@@ -212,7 +219,7 @@ const Dashboard = () => {
                 </div>
                 <div className="products-grid">
                     {filteredProducts.map(product => (
-                        <Link to='productPage' state={{ product }} >
+                        <Link to='productPage' state={{ product }} key={product._id}>
                             <div className="product-card fade-in" key={product._id}>
                                 <img className="product-image" src={`${product.images.at(0)}`} alt="product.images" />
                                 <div className="discount-badge">-{product.discount}%</div>

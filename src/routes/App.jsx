@@ -7,6 +7,8 @@ import ProfilePage from '../pages/ProfilePage'
 import ProductPage from '../pages/ProductPage'
 import AuthPage from '../pages/AuthPage'
 import AddressManagement from '../pages/AddressManagement'
+import OrderPage from '../pages/OrderPage'
+import OrderProductPage from '../pages/OrderProductPage'
 
 function App() {
 
@@ -17,6 +19,8 @@ function App() {
       <Route path="/productPage" element={<ProductPage />} />
       <Route path="/profilePage" element={<ProfilePage />} />
       <Route path="/AddressManagement" element={<AddressManagement />} />
+      <Route path="/OrderPage" element={<OrderPage />} />
+      <Route path="/OrderProductPage" element={<OrderProductPage />} />
       <Route path="/uploadProduct" element={<UploadProduct />} />
     </Routes>
   )

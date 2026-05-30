@@ -307,7 +307,7 @@ const AuthPage = () => {
                                 )}
                             </button>
 
-                            <div className="auth-divider">
+                            {/* <div className="auth-divider">
                                 <span className="divider-line"></span>
                                 <span className="divider-text">or login with</span>
                                 <span className="divider-line"></span>
@@ -323,7 +323,7 @@ const AuthPage = () => {
                                 <button type="button" className="social-btn apple">
                                     <span>🍎</span> Apple
                                 </button>
-                            </div>
+                            </div> */}
 
                             <p className="auth-footer">
                                 New to ShopAdda?{' '}
@@ -493,7 +493,7 @@ const AuthPage = () => {
                                 )}
                             </button>
 
-                            <div className="auth-divider">
+                            {/* <div className="auth-divider">
                                 <span className="divider-line"></span>
                                 <span className="divider-text">or sign up with</span>
                                 <span className="divider-line"></span>
@@ -509,7 +509,7 @@ const AuthPage = () => {
                                 <button type="button" className="social-btn apple">
                                     <span>🍎</span> Apple
                                 </button>
-                            </div>
+                            </div> */}
 
                             <p className="auth-footer">
                                 Already have an account?{' '}

@@ -1,12 +1,24 @@
 // UploadProduct.jsx
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
 import './UploadProduct.css';
 import { initImageSever, uploadImageToSever } from '../services/imageService';
 import { uploadProductToServer } from '../services/productService';
 
 const UploadProduct = () => {
+    const navigate = useNavigate();
+    const [user, serUser] = useState(null);
+    useEffect(() => {
+        const user = JSON.parse(Cookies.get("userData") || null);
+        if (user)
+            serUser(user);
+        else
+            navigate("/login");
+    }, []);
     const [productData, setProductData] = useState({
         name: '',
+        userEmail: '',
         brand: '',
         rating: '',
         reviews: '',
@@ -53,7 +65,7 @@ const UploadProduct = () => {
     ];
 
     const brandsList = [
-        'Apple','Asus', 'Samsung', 'Nike', 'Adidas', 'Sony',
+        'Apple', 'Asus', 'Samsung', 'Nike', 'Adidas', 'Sony',
         'LG', 'Boat', 'Puma', 'Zara', 'H&M', 'OnePlus', 'Xiaomi'
     ];
 
@@ -217,6 +229,7 @@ const UploadProduct = () => {
             const finalProductData = {
                 ...productData,
                 images: uploadedImageUrls,
+                userEmail: user.email
             };
             setUploadProgress(85);
             const response = await uploadProductToServer(finalProductData);

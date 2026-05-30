@@ -1,5 +1,5 @@
-// const BASE_URL = "http://localhost:3000/api/";
-const BASE_URL = "https://shop-adda-backend.vercel.app/api/";
+const BASE_URL = "http://localhost:3000/api/";
+// const BASE_URL = "https://shop-adda-backend.vercel.app/api/";
 
 export const registerUserToServer = async (user) => {
     const response = await fetch(`${BASE_URL}user/register`, {

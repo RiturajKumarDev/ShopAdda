@@ -32,10 +32,10 @@ const ProfilePage = () => {
     ]);
 
     const [cartlist, setCartlist] = useState([
-        { _id: 1, name: 'iPhone 15 Pro', price: '$999', discount: '23%', images: ['📱', '📱'], inStock: true },
-        { _id: 2, name: 'Nike Air Max', price: '$149', discount: '40%', images: ['👟', '👟'], inStock: true },
-        { _id: 3, name: 'Smart Watch Ultra', price: '$399', discount: '15%', images: ['⌚', '⌚'], inStock: false },
-        { _id: 4, name: 'Designer Handbag', price: '$299', discount: '50%', images: ['👜', '👜'], inStock: true }
+        { _id: 1, name: 'iPhone 15 Pro', quantity: 1, price: '$999', discount: '23%', images: ['📱', '📱'], inStock: true },
+        { _id: 2, name: 'Nike Air Max', quantity: 1, price: '$149', discount: '40%', images: ['👟', '👟'], inStock: true },
+        { _id: 3, name: 'Smart Watch Ultra', quantity: 1, price: '$399', discount: '15%', images: ['⌚', '⌚'], inStock: false },
+        { _id: 4, name: 'Designer Handbag', quantity: 1, price: '$299', discount: '50%', images: ['👜', '👜'], inStock: true }
     ]);
 
     const [addresses, setAddresses] = useState([
@@ -51,7 +51,7 @@ const ProfilePage = () => {
                 .then(async (response) => {
                     const carts = await response.json();
                     if (response.ok) {
-                        const cartList = carts.map(item => { return item.productId });
+                        const cartList = carts.map(cart => { return { ...cart.productId, quantity: cart.quantity, userId: user._id } });
                         setCartlist(cartList);
                     }
                 });
@@ -283,11 +283,14 @@ const ProfilePage = () => {
                         <div className="wishlist-tab fade-in">
                             <div className="wishlist-header">
                                 <h3>My Cart ({cartlist.length})</h3>
-                                <button className="move-all-btn">Order All</button>
+                                <Link to='../OrderProductPage' state={{ products: cartlist }}>
+                                    <button className="move-all-btn">Order All</button>
+                                </Link>
                             </div>
 
                             <div className="wishlist-grid">
-                                {cartlist.map(item => (
+                                {cartlist.map(item => item._id ? (
+                                    console.log(item),
                                     <div className="wishlist-item" key={item._id}>
                                         <img className="item-image" src={item.images.at(0)} alt="item-image" />
                                         <div className="item-details">
@@ -317,7 +320,7 @@ const ProfilePage = () => {
                                             </button>
                                         </div>
                                     </div>
-                                ))}
+                                ) : "")}
                             </div>
                         </div>
                     )}
