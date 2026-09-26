@@ -47,6 +47,16 @@ export const getUserFromServer = async () => {
     return response;
 }
 
+export const getAllUsersFromServer = async () => {
+    const response = await fetch(`${BASE_URL}user/getAllUsers`, {
+        method: "GET",
+        headers: {
+            "Authorization": getToken(),
+        },
+    });
+    return response;
+}
+
 export const updateUserToServer = async (user) => {
     const response = await fetch(`${BASE_URL}user/update`, {
         method: "PUT",

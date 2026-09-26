@@ -50,10 +50,29 @@ exports.register = [
     check("role")
         .notEmpty()
         .withMessage("Please select a role type")
-        .isIn(["Admin", "Vendor", "User"])
+        .isIn(["Vendor", "User"])
         .withMessage("Invalud role type"),
+    check('businessName')
+        .if((value, { req }) => req.body.role === 'Vendor')
+        .notEmpty()
+        .withMessage('Business Name is required for vendors'),
+    check('gstNumber')
+        .if((value, { req }) => req.body.role === 'Vendor')
+        .notEmpty()
+        .withMessage('GST Number is required for vendors'),
+    check('panNumber')
+        .if((value, { req }) => req.body.role === 'Vendor')
+        .notEmpty()
+        .withMessage('PAN Number is required for vendors'),
+    check('aadharNumber')
+        .if((value, { req }) => req.body.role === 'Vendor')
+        .notEmpty()
+        .withMessage('Aadhar Number is required for vendors'),
+    check('storeAddress')
+        .if((value, { req }) => req.body.role === 'Vendor')
+        .notEmpty()
+        .withMessage('Store Address is required for vendors'),
     (req, res, next) => {
-        const user = { userType, fullName, email, mobile, dob, gender, password } = req.body;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({
@@ -61,9 +80,9 @@ exports.register = [
             });
         }
 
-        bcrypt.hash(password, 12)
+        bcrypt.hash(req.body.password, 12)
             .then(hashPassword => {
-                const user = new User({ ...req.body, userType: "user", password: hashPassword });
+                const user = new User({ ...req.body, password: hashPassword });
                 user.save()
                     .then((result) => {
                         return res.status(201).json(result);
@@ -100,7 +119,7 @@ exports.getUser = async (req, res, next) => {
 
 exports.updateUser = async (req, res, next) => {
     const _id = req.user._id;
-    const { fullName, email, mobile, dob, gender } = req.body;
+    const { fullName, email, mobile, dob, gender, businessName, gstNumber, panNumber, aadharNumber, storeAddress } = req.body;
 
     try {
         const user = await User.findById(_id);
@@ -117,6 +136,11 @@ exports.updateUser = async (req, res, next) => {
         if (mobile !== undefined) user.mobile = mobile;
         if (dob !== undefined) user.dob = dob;
         if (gender !== undefined) user.gender = gender;
+        if (businessName !== undefined) user.businessName = businessName;
+        if (gstNumber !== undefined) user.gstNumber = gstNumber;
+        if (panNumber !== undefined) user.panNumber = panNumber;
+        if (aadharNumber !== undefined) user.aadharNumber = aadharNumber;
+        if (storeAddress !== undefined) user.storeAddress = storeAddress;
 
         const updatedUser = await user.save();
 
@@ -237,5 +261,14 @@ exports.changePassword = async (req, res, next) => {
         res.status(500).json({
             errors: ["Server Error"]
         });
+    }
+};
+
+exports.getAllUsers = async (req, res, next) => {
+    try {
+        const users = await User.find({}, '-password'); // Exclude passwords
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ errors: "Server Error" });
     }
 };

@@ -16,7 +16,7 @@ export const createOrder = async (products) => {
     return response;
 };
 
-export const makePayment = async (products, address) => {
+export const makePayment = async (products, address, onSuccess) => {
     const response = await createOrder(products);
     const res = await response.json();
     var options = {
@@ -68,7 +68,7 @@ export const makePayment = async (products, address) => {
                             
                             const data = await response.json();
                             if (response.ok) {
-                                alert("Order Save Successfully!");
+                                if (onSuccess) onSuccess();
                             } else {
                                 alert(data.error || "Failed to save order");
                             }

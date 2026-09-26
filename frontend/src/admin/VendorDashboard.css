@@ -77,6 +77,8 @@
   padding: 24px 16px;
   margin: 0;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .vd-sidebar-menu li {
@@ -105,6 +107,17 @@
   background-color: var(--vd-primary);
   color: var(--vd-white);
   box-shadow: var(--vd-shadow-md);
+}
+
+.vd-logout-btn {
+  margin-top: auto;
+  color: var(--vd-danger) !important;
+  cursor: pointer;
+}
+
+.vd-logout-btn:hover {
+  background-color: var(--vd-danger-bg) !important;
+  color: var(--vd-danger) !important;
 }
 
 /* Main Content */

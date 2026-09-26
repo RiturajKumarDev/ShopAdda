@@ -3,7 +3,6 @@ const Cart = require("./Cart");
 
 const ProductSchema = new mongoose.Schema({
     vendorId: { type: String, required: true },
-    userEmail: { type: String, required: true, trim: true },
     name: { type: String, required: true, trim: true, },
     brand: { type: String, trim: true, },
     category: { type: String, trim: true },

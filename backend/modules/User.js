@@ -17,6 +17,13 @@ const UserSchema = new mongoose.Schema(
         password: { type: String, required: true },
         approved: { type: Boolean, required: true, default: false },
         joinDate: { type: Date, default: Date.now },
+
+        // Business Details
+        businessName: String,
+        gstNumber: String,
+        panNumber: String,
+        aadharNumber: String,
+        storeAddress: String,
     },
 );
 

@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import './UploadProduct.css';
 import { initImageSever, uploadImageToSever } from '../services/imageService';
-import { uploadProductToServer } from '../services/productService';
+import { uploadProductToServer, updateProductToServer } from '../services/productService';
 import { FiImage, FiUploadCloud, FiCamera, FiStar, FiCheck, FiCheckCircle, FiXCircle } from 'react-icons/fi';
 
-const UploadProduct = () => {
+const UploadProduct = ({ editingProduct = null, onUploadComplete = null }) => {
     const navigate = useNavigate();
     const [user, serUser] = useState(null);
     useEffect(() => {
@@ -19,7 +19,7 @@ const UploadProduct = () => {
     }, []);
     const [productData, setProductData] = useState({
         name: '',
-        userEmail: '',
+        category: '',
         brand: '',
         rating: '',
         reviews: '',
@@ -59,6 +59,15 @@ const UploadProduct = () => {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [activeTab, setActiveTab] = useState('basic');
     const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        if (editingProduct) {
+            setProductData({
+                ...editingProduct
+            });
+            setImagePreviews(editingProduct.images || []);
+        }
+    }, [editingProduct]);
 
     const categories = [
         'Electronics', 'Fashion', 'Home & Living',
@@ -216,29 +225,40 @@ const UploadProduct = () => {
             const uploadedImageUrls = [];
             for (let i = 0; i < productData.images.length; i++) {
                 const img = productData.images[i];
-                const result = await uploadImageToSever(img);
-                if (result) {
-                    uploadedImageUrls.push(result);
-                    const progress = Math.floor(
-                        ((i + 1) / productData.images.length) * 70
-                    );
-                    setUploadProgress(progress);
-                } else
-                    throw new Error('Image upload failed');
+                if (typeof img === 'string') {
+                    uploadedImageUrls.push(img);
+                } else {
+                    const result = await uploadImageToSever(img);
+                    if (result) {
+                        uploadedImageUrls.push(result);
+                        const progress = Math.floor(
+                            ((i + 1) / productData.images.length) * 70
+                        );
+                        setUploadProgress(progress);
+                    } else
+                        throw new Error('Image upload failed');
+                }
             }
 
             const finalProductData = {
                 ...productData,
-                images: uploadedImageUrls,
-                userEmail: user.email
+                images: uploadedImageUrls
             };
             setUploadProgress(85);
-            const response = await uploadProductToServer(finalProductData);
+            
+            let response;
+            if (editingProduct) {
+                response = await updateProductToServer(editingProduct._id, finalProductData);
+            } else {
+                response = await uploadProductToServer(finalProductData);
+            }
+            
             const data = await response.json();
             setUploadProgress(100);
             if (response.ok) {
-                alert('Product uploaded successfully! 🎉');
+                alert(`Product ${editingProduct ? 'updated' : 'uploaded'} successfully! 🎉`);
                 resetForm();
+                if (onUploadComplete) onUploadComplete();
             } else
                 alert("Upload Error: " + data.errors);
         } catch (error) {
@@ -254,6 +274,7 @@ const UploadProduct = () => {
         setProductData({
             id: Date.now(),
             name: '',
+            category: '',
             brand: '',
             rating: '',
             reviews: '',
@@ -828,29 +849,7 @@ const UploadProduct = () => {
                     </div>
                 </div>
 
-                {/* JSON Output Preview */}
-                <div className="json-preview">
-                    <h3>Product Data Preview (JSON Format)</h3>
-                    <pre>
-                        {JSON.stringify({
-                            id: productData.id,
-                            name: productData.name || 'Product Name',
-                            brand: productData.brand || 'Brand',
-                            rating: productData.rating || '0',
-                            reviews: productData.reviews || '0',
-                            price: productData.price || '0',
-                            originalPrice: productData.originalPrice || '0',
-                            discount: productData.discount || '0',
-                            description: productData.description || 'Description',
-                            features: productData.features,
-                            specifications: productData.specifications,
-                            images: productData.images.map(() => 'image_file'),
-                            colors: productData.colors,
-                            sizes: productData.sizes,
-                            inStock: productData.inStock
-                        }, null, 2)}
-                    </pre>
-                </div>
+
             </div>
         </div>
     );

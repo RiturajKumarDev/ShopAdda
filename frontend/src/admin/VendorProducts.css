@@ -1,0 +1,359 @@
+.vendor-products {
+  animation: fadeIn 0.4s ease;
+}
+
+.vp-products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.vp-products-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.vp-products-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.vp-search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 8px 16px;
+  width: 300px;
+}
+
+.vp-search-box svg {
+  color: #94a3b8;
+  margin-right: 8px;
+}
+
+.vp-search-box input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.vp-btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  text-decoration: none;
+}
+
+.vp-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.vp-products-table-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+
+.vp-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.vp-table th {
+  background: #f8fafc;
+  padding: 16px 24px;
+  text-align: left;
+  font-weight: 600;
+  color: #475569;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.vp-table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.vp-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.vp-product-cell {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.vp-product-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #f1f5f9;
+}
+
+.vp-product-info h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.vp-product-info p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.vp-status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.vp-status-badge.instock {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.vp-status-badge.outstock {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.vp-action-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.vp-icon-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vp-icon-btn:hover {
+  background: #f1f5f9;
+  color: #3b82f6;
+}
+
+.vp-icon-btn.delete:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal Styles */
+.vp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vp-modal-content {
+  background: #f8fafc;
+  width: 95%;
+  max-width: 1100px;
+  height: 92vh;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vp-modal-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #64748b;
+  cursor: pointer;
+  z-index: 1010;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vp-modal-close:hover {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+}
+
+.vp-modal-scrollable {
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  border-radius: 24px;
+}
+
+/* Modal specific overrides for UploadProduct */
+.vp-modal-content .upload-container {
+  min-height: auto;
+  padding: 30px;
+  background: transparent;
+}
+
+.vp-modal-content .upload-wrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: start;
+  gap: 20px 30px;
+  margin: 0;
+  max-width: 100%;
+}
+
+.vp-modal-content .upload-header {
+  grid-column: 1 / -1;
+  grid-row: 1 / 2;
+  text-align: left;
+  margin: 0 0 20px 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.vp-modal-content .upload-header .header-icon {
+  font-size: 2rem;
+  margin: 0;
+  color: #3b82f6;
+}
+
+.vp-modal-content .upload-header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.vp-modal-content .upload-header p {
+  display: none;
+}
+
+.vp-modal-content .progress-steps {
+  grid-column: 1 / 2;
+  margin-bottom: 0;
+  padding: 1rem;
+  min-width: 0;
+}
+
+.vp-modal-content .upload-form {
+  grid-column: 1 / 2;
+  min-width: 0;
+}
+
+.vp-modal-content .live-preview {
+  grid-column: 2 / 3;
+  grid-row: 2 / 4;
+  margin: 0;
+  position: sticky;
+  top: 30px;
+  min-width: 0;
+}
+
+.vp-modal-content .preview-card {
+  flex-direction: column;
+}
+
+.vp-modal-content .preview-image {
+  width: 100%;
+  height: 280px;
+}
+
+.vp-modal-content .preview-info {
+  padding: 1.5rem;
+}
+
+/* Inner form spacing overrides */
+.vp-modal-content .form-tab {
+  padding: 1.5rem;
+}
+
+.vp-modal-content .form-grid {
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.vp-modal-content .step {
+  min-width: 85px;
+}
+
+.vp-modal-content .step-number {
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+}
+
+.vp-modal-content .step-label {
+  font-size: 0.8rem;
+}
+
+/* Custom Scrollbar for Modal */
+.vp-modal-scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+.vp-modal-scrollable::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 0 24px 24px 0;
+}
+.vp-modal-scrollable::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+.vp-modal-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+

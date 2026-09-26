@@ -12,7 +12,11 @@ exports.create_access_token = async (data, res) => {
         }
     );
 
-    return res.status(200).json({ access_token: token, token_type: "bearer" });
+    return res.status(200).json({ 
+        access_token: token, 
+        token_type: "bearer",
+        user: { _id, email, fullName, role, approved }
+    });
 };
 
 exports.verify_token = (req, res, next) => {
@@ -45,12 +49,12 @@ exports.verify_token = (req, res, next) => {
 exports.verify_vendor = (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader)
-        return res.status(401).json({ message: "Authorization token required" });
+        return res.status(401).json({ errors: "Authorization token required" });
 
     const parts = authHeader.split(" ");
 
     if (parts.length !== 2 || parts[0] !== "Bearer")
-        return res.status(401).json({ message: "Invalid authorization header" });
+        return res.status(401).json({ errors: "Invalid authorization header" });
 
     const token = parts[1];
     try {
@@ -63,12 +67,12 @@ exports.verify_vendor = (req, res, next) => {
         );
         req.user = decoded;
         if (req.user.role !== "Vendor")
-            return res.status(403).json({ message: "Access denied: Vendor role required" });
+            return res.status(403).json({ errors: "Access denied: Vendor role required" });
         if (req.user.approved !== true)
-            return res.status(403).json({ message: "Vendor account is not approved" });
+            return res.status(403).json({ errors: "Vendor account is not approved" });
         next();
     } catch (err) {
-        return res.status(401).json({ message: "Invalid or expired token" });
+        return res.status(401).json({ errors: "Invalid or expired token" });
     }
 };
 

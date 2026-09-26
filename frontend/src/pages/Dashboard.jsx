@@ -146,16 +146,6 @@ const Dashboard = () => {
                                 {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
                             </button>
                         </div>
-
-                        {(user && (user.role === 'Admin' || user.role === 'Vendor')) && (
-                            <div className="seller-center">
-                                <a href="/uploadProduct" target='_main'>
-                                    <button className="nav-link">
-                                        <span style={{ marginRight: '5px' }}><MdStorefront /></span> <span className="nav-text">Seller Center</span>
-                                    </button>
-                                </a>
-                            </div>
-                        )}
                     </div>
                 </div>
 

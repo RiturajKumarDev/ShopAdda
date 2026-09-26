@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';
-import { FiShoppingBag, FiZap, FiTruck, FiLock, FiRefreshCw, FiUnlock, FiEdit3, FiEye, FiEyeOff, FiCheck, FiGift, FiDollarSign, FiMail, FiUser, FiPhone, FiCalendar } from 'react-icons/fi';
+import { FiShoppingBag, FiZap, FiTruck, FiLock, FiRefreshCw, FiUnlock, FiEdit3, FiEye, FiEyeOff, FiCheck, FiGift, FiDollarSign, FiMail, FiUser, FiPhone, FiCalendar, FiBriefcase, FiFileText, FiCreditCard, FiMapPin } from 'react-icons/fi';
 import './AuthPage.css';
 import { loginUserToServer, registerUserToServer } from '../services/authService';
 
@@ -14,12 +14,19 @@ const AuthPage = () => {
     const [rememberMe, setRememberMe] = useState(false);
 
     useEffect(() => {
-        const user = JSON.parse(Cookies.get("userData") || null);
-        if (user) {
-            if (user.access_token)
+        const userStr = Cookies.get("userData");
+        const user = userStr && userStr !== "undefined" ? JSON.parse(userStr) : null;
+        if (user && user.access_token) {
+            const userRole = user.role || (user.user && user.user.role) || (user.data && user.data.role);
+            if (userRole === 'Admin') {
+                navigate("/admin");
+            } else if (userRole === 'Vendor') {
+                navigate("/vendor-dashboard");
+            } else {
                 navigate("/");
+            }
         }
-    }, []);
+    }, [navigate]);
 
     // Login Form State
     const [loginData, setLoginData] = useState({
@@ -36,7 +43,12 @@ const AuthPage = () => {
         gender: '',
         role: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        businessName: '',
+        gstNumber: '',
+        panNumber: '',
+        aadharNumber: '',
+        storeAddress: ''
     });
 
     const [errors, setErrors] = useState({});
@@ -89,7 +101,16 @@ const AuthPage = () => {
         if (!registerData.dob) newErrors.dob = 'Date of birth is required';
         if (!registerData.gender) newErrors.gender = 'Gender is required';
         if (!registerData.role) newErrors.role = 'Please select a role type';
-        else if (!["Admin", "Vendor", "User"].includes(registerData.role)) newErrors.role = 'Invalid role type';
+        else if (!["Vendor", "User"].includes(registerData.role)) newErrors.role = 'Invalid role type';
+        
+        if (registerData.role === 'Vendor') {
+            if (!registerData.businessName) newErrors.businessName = 'Business Name is required';
+            if (!registerData.gstNumber) newErrors.gstNumber = 'GST Number is required';
+            if (!registerData.panNumber) newErrors.panNumber = 'PAN Number is required';
+            if (!registerData.aadharNumber) newErrors.aadharNumber = 'Aadhar Number is required';
+            if (!registerData.storeAddress) newErrors.storeAddress = 'Store Address is required';
+        }
+
         if (!registerData.password) newErrors.password = 'Password is required';
         else if (registerData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
         if (registerData.password !== registerData.confirmPassword) {
@@ -109,7 +130,14 @@ const AuthPage = () => {
             if (response.ok) {
                 alert('Login Successful! Welcome back to ShopAdda! 🎉');
                 Cookies.set("userData", JSON.stringify(data), { expires: 7 });
-                navigate("/");
+                const userRole = data.role || (data.user && data.user.role) || (data.data && data.data.role);
+                if (userRole === 'Admin') {
+                    navigate("/admin");
+                } else if (userRole === 'Vendor') {
+                    navigate("/vendor-dashboard");
+                } else {
+                    navigate("/");
+                }
             }
             else {
                 alert(Array.isArray(data.errors) ? data.errors.join(", ") : data.errors || 'Login failed');
@@ -283,13 +311,13 @@ const AuthPage = () => {
                                     placeholder="Password"
                                 />
                                 <label className="input-label">Password</label>
-                                    <button
-                                        type="button"
-                                        className="password-toggle"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                    >
-                                        {showPassword ? <FiEyeOff /> : <FiEye />}
-                                    </button>
+                                <button
+                                    type="button"
+                                    className="password-toggle"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                                </button>
                                 <div className="input-border"></div>
                                 {errors.password && <span className="error-message">{errors.password}</span>}
                             </div>
@@ -435,7 +463,6 @@ const AuthPage = () => {
                                         className={`form-input ${errors.role ? 'error' : ''}`}
                                     >
                                         <option value="">Select Role</option>
-                                        <option value="Admin">Admin</option>
                                         <option value="Vendor">Vendor</option>
                                         <option value="User">User</option>
                                     </select>
@@ -443,6 +470,85 @@ const AuthPage = () => {
                                     <div className="input-border"></div>
                                     {errors.role && <span className="error-message">{errors.role}</span>}
                                 </div>
+
+                                {registerData.role === 'Vendor' && (
+                                    <>
+                                        <div className="input-group full-width">
+                                            <div className="input-icon"><FiBriefcase /></div>
+                                            <input
+                                                type="text"
+                                                name="businessName"
+                                                value={registerData.businessName}
+                                                onChange={handleRegisterChange}
+                                                className={`form-input ${errors.businessName ? 'error' : ''}`}
+                                                placeholder="Business Name"
+                                            />
+                                            <label className="input-label">Business Name</label>
+                                            <div className="input-border"></div>
+                                            {errors.businessName && <span className="error-message">{errors.businessName}</span>}
+                                        </div>
+
+                                        <div className="input-group">
+                                            <div className="input-icon"><FiFileText /></div>
+                                            <input
+                                                type="text"
+                                                name="gstNumber"
+                                                value={registerData.gstNumber}
+                                                onChange={handleRegisterChange}
+                                                className={`form-input ${errors.gstNumber ? 'error' : ''}`}
+                                                placeholder="GST Number"
+                                            />
+                                            <label className="input-label">GST Number</label>
+                                            <div className="input-border"></div>
+                                            {errors.gstNumber && <span className="error-message">{errors.gstNumber}</span>}
+                                        </div>
+
+                                        <div className="input-group">
+                                            <div className="input-icon"><FiCreditCard /></div>
+                                            <input
+                                                type="text"
+                                                name="panNumber"
+                                                value={registerData.panNumber}
+                                                onChange={handleRegisterChange}
+                                                className={`form-input ${errors.panNumber ? 'error' : ''}`}
+                                                placeholder="PAN Number"
+                                            />
+                                            <label className="input-label">PAN Number</label>
+                                            <div className="input-border"></div>
+                                            {errors.panNumber && <span className="error-message">{errors.panNumber}</span>}
+                                        </div>
+
+                                        <div className="input-group">
+                                            <div className="input-icon"><FiFileText /></div>
+                                            <input
+                                                type="text"
+                                                name="aadharNumber"
+                                                value={registerData.aadharNumber}
+                                                onChange={handleRegisterChange}
+                                                className={`form-input ${errors.aadharNumber ? 'error' : ''}`}
+                                                placeholder="Aadhar Number"
+                                            />
+                                            <label className="input-label">Aadhar Number</label>
+                                            <div className="input-border"></div>
+                                            {errors.aadharNumber && <span className="error-message">{errors.aadharNumber}</span>}
+                                        </div>
+
+                                        <div className="input-group full-width">
+                                            <div className="input-icon"><FiMapPin /></div>
+                                            <input
+                                                type="text"
+                                                name="storeAddress"
+                                                value={registerData.storeAddress}
+                                                onChange={handleRegisterChange}
+                                                className={`form-input ${errors.storeAddress ? 'error' : ''}`}
+                                                placeholder="Store Address"
+                                            />
+                                            <label className="input-label">Store Address</label>
+                                            <div className="input-border"></div>
+                                            {errors.storeAddress && <span className="error-message">{errors.storeAddress}</span>}
+                                        </div>
+                                    </>
+                                )}
 
                                 <div className="input-group">
                                     <div className="input-icon"><FiCalendar /></div>

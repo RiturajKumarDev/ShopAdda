@@ -7,8 +7,8 @@ exports.saveOrder = async (req, res, next) => {
     try {
         const { products, address, paymentMethod } = req.body;
         for (const product of products) {
-            const { userEmail, name, brand, category, rating, reviews, price, quantity, originalPrice, discount, description, features, specifications, images, colors, sizes } = product;
-            const order = new Order({ userEmail, name, brand, category, rating, reviews, price, quantity, originalPrice, discount, description, features, specifications, images, colors, sizes, userId: address.userId, address, paymentMethod });
+            const { vendorId, name, brand, category, rating, reviews, price, quantity, originalPrice, discount, description, features, specifications, images, colors, sizes } = product;
+            const order = new Order({ vendorId, name, brand, category, rating, reviews, price, quantity, originalPrice, discount, description, features, specifications, images, colors, sizes, userId, address, paymentMethod });
             try {
                 const result = await order.save();
             } catch (error) {
@@ -39,4 +39,35 @@ exports.orderList = async (req, res, next) => {
         .catch(err => {
             res.status(500).json({ errors: "Server Error" + err.errmsg });
         })
+};
+
+exports.getVendorOrders = async (req, res, next) => {
+    const vendorId = req.user._id;
+    Order.find({ vendorId })
+        .sort({ _id: -1 }) // Newest first
+        .then(orders => {
+            res.status(200).json(orders);
+        })
+        .catch(err => {
+            res.status(500).json({ errors: "Server Error" + err.errmsg });
+        })
+};
+
+exports.updateOrderStatus = async (req, res, next) => {
+    const vendorId = req.user._id;
+    const { _id } = req.params;
+    const { status } = req.body;
+    try {
+        const order = await Order.findOneAndUpdate(
+            { _id, vendorId },
+            { status },
+            { new: true }
+        );
+        if (!order) {
+            return res.status(404).json({ errors: "Order not found or unauthorized to edit" });
+        }
+        res.status(200).json(order);
+    } catch (err) {
+        res.status(500).json({ errors: "Server Error" + err.message });
+    }
 };

@@ -6,7 +6,8 @@ import './OrderProductPage.css';
 import { getAddressListFromServer } from '../services/addressService';
 import { makePayment } from '../services/paymentService';
 import { remeveFromCartServer } from '../services/cartService';
-import { FiShoppingCart, FiTrash2, FiPhone, FiCheck } from 'react-icons/fi';
+import { saveOrderToServer } from '../services/orderService';
+import { FiShoppingCart, FiTrash2, FiPhone, FiCheck, FiCreditCard, FiDollarSign } from 'react-icons/fi';
 
 const OrderProductPage = () => {
     const navigate = useNavigate();
@@ -98,36 +99,40 @@ const OrderProductPage = () => {
         }
     };
 
-    const handlePlaceOrder = () => {
+    const handlePlaceOrder = async () => {
         if (!selectedAddress) {
             alert('Please select a delivery address');
             return;
         }
 
-        const newOrderId = `ORD${Date.now()}`;
-        setOrderId(newOrderId);
-
-        const orderData = {
-            id: newOrderId,
-            orderDate: new Date().toISOString(),
-            items: cartItems,
-            subtotal: calculateSubtotal(),
-            total: calculateTotal(),
-            paymentMethod: paymentMethod,
-            shippingAddress: selectedAddress,
-            orderStatus: 'Processing',
-            paymentStatus: paymentMethod === 'cod' ? 'Pending' : 'Paid'
-        };
-
-        // Save order to localStorage
-        const existingOrders = localStorage.getItem('shopadda_orders');
-        const orders = existingOrders ? JSON.parse(existingOrders) : [];
-        orders.unshift(orderData);
-        localStorage.setItem('shopadda_orders', JSON.stringify(orders));
-
-        // Removed setCartItems([]) so the confirmation page can still show the items!
-        setOrderPlaced(true);
-        setStep(4);
+        if (paymentMethod === 'online') {
+            const loaded = await loadRazorpay();
+            if (!loaded) {
+                alert("Razorpay SDK failed to load");
+                return;
+            }
+            const options = await makePayment(cartItems, selectedAddress, () => {
+                setOrderPlaced(true);
+                setStep(4);
+            });
+            const rzp1 = new window.Razorpay(options);
+            rzp1.open();
+        } else {
+            // Cash on Delivery
+            try {
+                const orderData = { products: cartItems, address: selectedAddress, paymentMethod: 'Cash On Delivery' };
+                const response = await saveOrderToServer(orderData);
+                if (response.ok) {
+                    setOrderPlaced(true);
+                    setStep(4);
+                } else {
+                    const data = await response.json();
+                    alert(data.error || "Failed to place order");
+                }
+            } catch (err) {
+                alert("Error placing order: " + err.message);
+            }
+        }
     };
 
     const handleContinueShopping = () => {
@@ -147,16 +152,7 @@ const OrderProductPage = () => {
     };
 
     const handlePayment = async () => {
-        const loaded = await loadRazorpay();
-
-        if (!loaded) {
-            alert("Razorpay SDK failed to load");
-            return;
-        }
-
-        const options = await makePayment(cartItems, selectedAddress);
-        const rzp1 = new window.Razorpay(options);
-        rzp1.open();
+        // Obsolete, merged into handlePlaceOrder
     };
 
     const renderCartStep = () => (
@@ -262,7 +258,7 @@ const OrderProductPage = () => {
                 <button className="back-btn" onClick={() => setStep(1)}>← Back to Cart</button>
                 <button
                     className="next-btn"
-                    onClick={() => { handlePayment(); setStep(3) }}
+                    onClick={() => setStep(3)}
                     disabled={!selectedAddress}
                 >
                     Proceed to Payment →
@@ -273,33 +269,73 @@ const OrderProductPage = () => {
 
     const renderPaymentStep = () => (
         <div className="payment-step fade-in">
-            <div className="order-summary-preview">
-                <h3>Order Summary</h3>
-                <div className="preview-items">
-                    {cartItems.map(item => (
-                        <div key={item._id} className="preview-item">
-                            <img className="item-image" src={item.images?.[0] || item.image} alt={item.name} />
-                            <span>{item.name} x {(item.quantity ? item.quantity : 1)}</span>
-                            <span>₹{(item.price * (item.quantity ? item.quantity : 1)).toFixed(2)}</span>
+            <div className="payment-step-layout">
+                <div className="order-summary-preview">
+                    <h3>Order Summary</h3>
+                    <div className="order-summary-items">
+                        {cartItems.map(item => (
+                            <div key={item._id} className="order-summary-item">
+                                <img className="item-image" src={item.images?.[0] || item.image} alt={item.name} />
+                                <span>{item.name} x {(item.quantity ? item.quantity : 1)}</span>
+                                <span>₹{(item.price * (item.quantity ? item.quantity : 1)).toFixed(2)}</span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="preview-total">
+                        <div className="summary-row">
+                            <span>Subtotal</span>
+                            <span>₹{calculateSubtotal().toFixed(2)}</span>
                         </div>
-                    ))}
+                        <div className="summary-row">
+                            <span>Shipping Options (Express)</span>
+                            <span>₹{calculateSubtotal().toFixed(2) - 40 < 500 ? 40 : 0}</span>
+                        </div>
+                        <div className="summary-row total">
+                            <span>Total</span>
+                            <span>₹{calculateTotal().toFixed(2)}</span>
+                        </div>
+                    </div>
                 </div>
-                <div className="preview-total">
-                    <div className="summary-row">
-                        <span>Subtotal</span>
-                        <span>₹{calculateSubtotal().toFixed(2)}</span>
-                    </div>
-                    <div className="summary-row">
-                        <span>Shipping Options (Express)</span>
-                        <span>₹{calculateSubtotal().toFixed(2) - 40 < 500 ? 40 : 0}</span>
-                    </div>
-                    <div className="summary-row total">
-                        <span>Total</span>
-                        <span>₹{calculateTotal().toFixed(2)}</span>
+                
+                <div className="payment-method-section">
+                    <h3>Select Payment Method</h3>
+                    <div className="payment-options">
+                        <label className={`payment-option ${paymentMethod === 'online' ? 'selected' : ''}`}>
+                            <input 
+                                type="radio" 
+                                name="paymentMethod" 
+                                value="online" 
+                                checked={paymentMethod === 'online'}
+                                onChange={() => setPaymentMethod('online')}
+                            />
+                            <div className="payment-option-content">
+                                <div className="payment-icon"><FiCreditCard /></div>
+                                <div className="payment-details">
+                                    <span className="payment-title">Pay Online</span>
+                                    <span className="payment-desc">Credit/Debit Card, UPI, NetBanking</span>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <label className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}>
+                            <input 
+                                type="radio" 
+                                name="paymentMethod" 
+                                value="cod" 
+                                checked={paymentMethod === 'cod'}
+                                onChange={() => setPaymentMethod('cod')}
+                            />
+                            <div className="payment-option-content">
+                                <div className="payment-icon"><FiDollarSign /></div>
+                                <div className="payment-details">
+                                    <span className="payment-title">Cash on Delivery</span>
+                                    <span className="payment-desc">Pay when your order arrives</span>
+                                </div>
+                            </div>
+                        </label>
                     </div>
                 </div>
             </div>
-
             <div className="step-actions">
                 <button className="back-btn" onClick={() => setStep(2)}>← Back to Address</button>
                 <button className="place-order-btn" onClick={handlePlaceOrder}>
