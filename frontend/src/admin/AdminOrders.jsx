@@ -29,14 +29,14 @@ const AdminOrders = () => {
   };
 
   const filteredOrders = orders.filter(order => {
-    const matchesSearch = (order.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          (order._id || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (order.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (order._id || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === 'All' || order.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
 
   const getStatusColor = (status) => {
-    switch(status) {
+    switch (status) {
       case 'Delivered': return 'status-active';
       case 'Pending': return 'status-pending';
       case 'Cancelled': return 'status-cancelled'; // Add this to CSS later if needed
@@ -70,11 +70,11 @@ const AdminOrders = () => {
       o.status || 'Pending',
       o.orderDate ? new Date(o.orderDate).toLocaleDateString() : 'N/A'
     ]);
-    
-    let csvContent = "data:text/csv;charset=utf-8," 
+
+    let csvContent = "data:text/csv;charset=utf-8,"
       + headers.join(",") + "\n"
       + rows.map(e => e.join(",")).join("\n");
-      
+
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -94,14 +94,14 @@ const AdminOrders = () => {
         <div className="users-actions">
           <div className="search-box">
             <FiSearch className="search-icon" />
-            <input 
-              type="text" 
-              placeholder="Search by Order ID or Product..." 
+            <input
+              type="text"
+              placeholder="Search by Order ID or Product..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <select 
+          <select
             className="role-filter"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
@@ -145,7 +145,7 @@ const AdminOrders = () => {
                       <td>
                         <div className="user-info-cell">
                           <div className="user-details">
-                            <span className="user-name" style={{fontFamily: 'monospace'}}>{order._id}</span>
+                            <span className="user-name" style={{ fontFamily: 'monospace' }}>{order._id}</span>
                           </div>
                         </div>
                       </td>
@@ -156,7 +156,7 @@ const AdminOrders = () => {
                         </div>
                       </td>
                       <td>
-                        <span className="user-name" style={{fontWeight: 600}}>₹{order.price * order.quantity}</span>
+                        <span className="user-name" style={{ fontWeight: 600 }}>₹{order.price * order.quantity}</span>
                       </td>
                       <td>
                         <span className={`status-badge ${getStatusColor(order.status)}`}>
@@ -171,10 +171,10 @@ const AdminOrders = () => {
                       </td>
                       <td>
                         <div className="action-buttons">
-                          <select 
-                            className="role-filter" 
-                            style={{padding: '4px 8px', fontSize: '11px'}}
-                            value={order.status || 'Pending'} 
+                          <select
+                            className="role-filter"
+                            style={{ padding: '4px 8px', fontSize: '11px' }}
+                            value={order.status || 'Pending'}
                             onChange={(e) => handleUpdateStatus(order._id, e.target.value)}
                           >
                             <option value="Pending">Pending</option>

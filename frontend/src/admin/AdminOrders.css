@@ -273,7 +273,8 @@
   border-color: rgba(239, 68, 68, 0.2);
 }
 
-.loading-state, .empty-state {
+.loading-state,
+.empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -300,7 +301,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 768px) {
@@ -308,13 +311,13 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .users-actions {
     width: 100%;
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .search-box {
     width: 100%;
   }
@@ -322,7 +325,10 @@
 
 .admin-modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   z-index: 1000;
@@ -364,7 +370,8 @@
   font-weight: 500;
 }
 
-.admin-form-group input, .admin-form-group select {
+.admin-form-group input,
+.admin-form-group select {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
@@ -375,7 +382,8 @@
   outline: none;
 }
 
-.admin-form-group input:focus, .admin-form-group select:focus {
+.admin-form-group input:focus,
+.admin-form-group select:focus {
   border-color: rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.08);
 }

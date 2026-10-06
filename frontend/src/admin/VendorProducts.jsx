@@ -31,8 +31,8 @@ const VendorProducts = () => {
     }
   };
 
-  const filteredProducts = products.filter(product => 
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.brand.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -41,24 +41,24 @@ const VendorProducts = () => {
       try {
         const response = await deleteProductFromServer(productId);
         if (response.ok) {
-           setProducts(products.filter(p => p._id !== productId));
+          setProducts(products.filter(p => p._id !== productId));
         } else {
-           alert("Failed to delete product");
+          alert("Failed to delete product");
         }
       } catch (err) {
         console.error(err);
       }
     }
   };
-  
+
   const handleEdit = (product) => {
-     setEditingProduct(product);
-     setIsUploadModalOpen(true);
+    setEditingProduct(product);
+    setIsUploadModalOpen(true);
   };
 
   const closeUploadModal = () => {
-      setEditingProduct(null);
-      setIsUploadModalOpen(false);
+    setEditingProduct(null);
+    setIsUploadModalOpen(false);
   };
 
   return (
@@ -68,9 +68,9 @@ const VendorProducts = () => {
         <div className="vp-products-actions">
           <div className="vp-search-box">
             <FiSearch />
-            <input 
-              type="text" 
-              placeholder="Search products..." 
+            <input
+              type="text"
+              placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -95,17 +95,17 @@ const VendorProducts = () => {
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan="5" style={{textAlign: 'center', padding: '40px'}}>Loading products...</td>
+                <td colSpan="5" style={{ textAlign: 'center', padding: '40px' }}>Loading products...</td>
               </tr>
             ) : filteredProducts.length > 0 ? (
               filteredProducts.map(product => (
                 <tr key={product._id}>
                   <td>
                     <div className="vp-product-cell">
-                      <img 
-                        src={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/48'} 
-                        alt={product.name} 
-                        className="vp-product-img" 
+                      <img
+                        src={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/48'}
+                        alt={product.name}
+                        className="vp-product-img"
                       />
                       <div className="vp-product-info">
                         <h4>{product.name}</h4>
@@ -115,8 +115,8 @@ const VendorProducts = () => {
                   </td>
                   <td>
                     <strong>₹{product.price}</strong>
-                    <br/>
-                    <span style={{textDecoration: 'line-through', fontSize: '12px', color: '#94a3b8'}}>₹{product.originalPrice}</span>
+                    <br />
+                    <span style={{ textDecoration: 'line-through', fontSize: '12px', color: '#94a3b8' }}>₹{product.originalPrice}</span>
                   </td>
                   <td>
                     {product.inStock ? (
@@ -140,7 +140,7 @@ const VendorProducts = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="5" style={{textAlign: 'center', padding: '40px'}}>No products found.</td>
+                <td colSpan="5" style={{ textAlign: 'center', padding: '40px' }}>No products found.</td>
               </tr>
             )}
           </tbody>

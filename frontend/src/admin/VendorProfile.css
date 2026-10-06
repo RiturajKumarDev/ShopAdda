@@ -19,7 +19,10 @@
 .vp-header::after {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: url('https://www.transparenttextures.com/patterns/cubes.png');
   opacity: 0.1;
 }
@@ -236,8 +239,15 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .vp-panel-header {
@@ -350,14 +360,14 @@ textarea.vp-input {
   .vp-content-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .vp-sidebar-nav {
     display: flex;
     overflow-x: auto;
     position: relative;
     top: 0;
   }
-  
+
   .vp-nav-btn {
     white-space: nowrap;
     padding: 12px;
@@ -371,17 +381,17 @@ textarea.vp-input {
     text-align: center;
     padding: 24px;
   }
-  
+
   .vp-avatar-wrapper {
     margin-top: -60px;
   }
-  
+
   .vp-stats {
     flex-direction: column;
     gap: 12px;
     align-items: center;
   }
-  
+
   .vp-form-grid {
     grid-template-columns: 1fr;
   }

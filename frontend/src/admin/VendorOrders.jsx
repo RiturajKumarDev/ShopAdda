@@ -31,7 +31,7 @@ const VendorOrders = () => {
     try {
       const response = await updateOrderStatusToServer(orderId, newStatus);
       if (response.ok) {
-        setOrders(orders.map(order => 
+        setOrders(orders.map(order =>
           order._id === orderId ? { ...order, status: newStatus } : order
         ));
       } else {
@@ -43,13 +43,13 @@ const VendorOrders = () => {
     }
   };
 
-  const filteredOrders = orders.filter(order => 
-    order._id.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredOrders = orders.filter(order =>
+    order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (order.name && order.name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const getStatusBadge = (status) => {
-    switch(status?.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case 'completed':
       case 'delivered':
         return <span className="vo-badge success"><FiCheckCircle /> {status}</span>;
@@ -68,9 +68,9 @@ const VendorOrders = () => {
         <h2>Order Management</h2>
         <div className="vo-search-box">
           <FiSearch />
-          <input 
-            type="text" 
-            placeholder="Search orders by ID or product..." 
+          <input
+            type="text"
+            placeholder="Search orders by ID or product..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -92,7 +92,7 @@ const VendorOrders = () => {
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan="6" style={{textAlign: 'center', padding: '40px'}}>Loading orders...</td>
+                <td colSpan="6" style={{ textAlign: 'center', padding: '40px' }}>Loading orders...</td>
               </tr>
             ) : filteredOrders.length > 0 ? (
               filteredOrders.map(order => (
@@ -128,7 +128,7 @@ const VendorOrders = () => {
                     {getStatusBadge(order.status)}
                   </td>
                   <td>
-                    <select 
+                    <select
                       className="vo-status-select"
                       value={order.status || 'Pending'}
                       onChange={(e) => handleStatusChange(order._id, e.target.value)}
@@ -144,7 +144,7 @@ const VendorOrders = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="6" style={{textAlign: 'center', padding: '40px'}}>No orders found.</td>
+                <td colSpan="6" style={{ textAlign: 'center', padding: '40px' }}>No orders found.</td>
               </tr>
             )}
           </tbody>

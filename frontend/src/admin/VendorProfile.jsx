@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
-import { 
-  FiUser, FiBriefcase, FiCreditCard, FiCamera, 
-  FiCheckCircle, FiEdit2, FiSave, FiStar, FiMapPin 
+import {
+  FiUser, FiBriefcase, FiCreditCard, FiCamera,
+  FiCheckCircle, FiEdit2, FiSave, FiStar, FiMapPin
 } from 'react-icons/fi';
 import { getUserFromServer, updateUserToServer } from '../services/authService';
 import './VendorProfile.css';
@@ -13,7 +13,7 @@ const VendorProfile = () => {
   const [activeTab, setActiveTab] = useState('personal');
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [profileData, setProfileData] = useState({
     fullName: '',
     email: '',
@@ -40,7 +40,7 @@ const VendorProfile = () => {
         navigate("/login");
         return;
       }
-      
+
       try {
         const response = await getUserFromServer();
         if (response.ok) {
@@ -48,7 +48,7 @@ const VendorProfile = () => {
           if (data.dob) data.dob = data.dob.split('T')[0];
           if (data.joinDate) data.joinDate = data.joinDate.split('T')[0];
           setProfileData(data);
-          
+
           setBusinessData({
             businessName: data.businessName || '',
             gstNumber: data.gstNumber || '',
@@ -126,18 +126,18 @@ const VendorProfile = () => {
               <FiCamera />
             </div>
           </div>
-          
+
           <div className="vp-top-info">
             <h1>{profileData.fullName || 'Vendor Name'}</h1>
             <div className="vp-badges">
               {profileData.approved ? (
                 <span className="vp-badge verified"><FiCheckCircle /> Verified Vendor</span>
               ) : (
-                <span className="vp-badge" style={{background: '#fee2e2', color: '#991b1b'}}>Pending Approval</span>
+                <span className="vp-badge" style={{ background: '#fee2e2', color: '#991b1b' }}>Pending Approval</span>
               )}
               <span className="vp-badge rating"><FiStar /> 4.8 / 5.0 Rating</span>
             </div>
-            
+
             <div className="vp-stats">
               <div className="vp-stat-item">
                 <FiMapPin /> {businessData.storeAddress || 'N/A'}
@@ -147,7 +147,7 @@ const VendorProfile = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="vp-top-actions">
             {!isEditing ? (
               <button className="vp-btn-primary" onClick={() => setIsEditing(true)}>
@@ -165,19 +165,19 @@ const VendorProfile = () => {
         <div className="vp-content-grid">
           {/* Sidebar */}
           <div className="vp-sidebar-nav">
-            <button 
+            <button
               className={`vp-nav-btn ${activeTab === 'personal' ? 'active' : ''}`}
               onClick={() => setActiveTab('personal')}
             >
               <FiUser /> Personal Information
             </button>
-            <button 
+            <button
               className={`vp-nav-btn ${activeTab === 'business' ? 'active' : ''}`}
               onClick={() => setActiveTab('business')}
             >
               <FiBriefcase /> Business Details
             </button>
-            <button 
+            <button
               className={`vp-nav-btn ${activeTab === 'payout' ? 'active' : ''}`}
               onClick={() => setActiveTab('payout')}
             >
@@ -192,55 +192,55 @@ const VendorProfile = () => {
                 <div className="vp-panel-header">
                   <h2 className="vp-panel-title">Personal Information</h2>
                 </div>
-                
+
                 <div className="vp-form-grid">
                   <div className="vp-input-group">
                     <label>Full Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="fullName"
                       value={profileData.fullName}
                       onChange={handleInputChange}
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                   <div className="vp-input-group">
                     <label>Email Address</label>
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
                       name="email"
                       value={profileData.email}
                       onChange={handleInputChange}
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                   <div className="vp-input-group">
                     <label>Mobile Number</label>
-                    <input 
-                      type="tel" 
+                    <input
+                      type="tel"
                       name="mobile"
                       value={profileData.mobile}
                       onChange={handleInputChange}
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                   <div className="vp-input-group">
                     <label>Date of Birth</label>
-                    <input 
-                      type="date" 
+                    <input
+                      type="date"
                       name="dob"
                       value={profileData.dob}
                       onChange={handleInputChange}
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                   <div className="vp-input-group">
                     <label>Gender</label>
-                    <select 
+                    <select
                       name="gender"
                       value={profileData.gender}
                       onChange={handleInputChange}
@@ -254,11 +254,11 @@ const VendorProfile = () => {
                   </div>
                   <div className="vp-input-group">
                     <label>Account Role</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={profileData.role}
                       disabled
-                      className="vp-input readonly" 
+                      className="vp-input readonly"
                     />
                   </div>
                 </div>
@@ -269,65 +269,65 @@ const VendorProfile = () => {
               <div className="vp-panel">
                 <div className="vp-panel-header">
                   <h2 className="vp-panel-title">Business Details</h2>
-                  <span style={{fontSize: '13px', color: '#64748b'}}>* Visible to customers</span>
+                  <span style={{ fontSize: '13px', color: '#64748b' }}>* Visible to customers</span>
                 </div>
-                
+
                 <div className="vp-form-grid full">
                   <div className="vp-input-group">
                     <label>Business Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="businessName"
                       value={businessData.businessName}
                       onChange={handleBusinessChange}
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                   <div className="vp-input-group">
                     <label>Store Address</label>
-                    <textarea 
+                    <textarea
                       name="storeAddress"
                       value={businessData.storeAddress}
                       onChange={handleBusinessChange}
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                 </div>
 
-                <div className="vp-form-grid" style={{marginTop: '24px'}}>
+                <div className="vp-form-grid" style={{ marginTop: '24px' }}>
                   <div className="vp-input-group">
                     <label>GST Identification Number</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="gstNumber"
                       value={businessData.gstNumber}
                       onChange={handleBusinessChange}
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                   <div className="vp-input-group">
                     <label>PAN Number</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="panNumber"
                       value={businessData.panNumber}
                       onChange={handleBusinessChange}
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                   <div className="vp-input-group">
                     <label>Aadhar Number</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="aadharNumber"
                       value={businessData.aadharNumber}
                       onChange={handleBusinessChange}
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                 </div>
@@ -339,42 +339,42 @@ const VendorProfile = () => {
                 <div className="vp-panel-header">
                   <h2 className="vp-panel-title">Bank & Payout Information</h2>
                 </div>
-                
+
                 <div className="vp-form-grid">
                   <div className="vp-input-group">
                     <label>Bank Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value="HDFC Bank"
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                   <div className="vp-input-group">
                     <label>Account Holder Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={profileData.fullName}
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                   <div className="vp-input-group">
                     <label>Account Number</label>
-                    <input 
-                      type="password" 
+                    <input
+                      type="password"
                       value="123456789012"
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                   <div className="vp-input-group">
                     <label>IFSC Code</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value="HDFC0001234"
                       disabled={!isEditing}
-                      className={`vp-input ${!isEditing ? 'readonly' : ''}`} 
+                      className={`vp-input ${!isEditing ? 'readonly' : ''}`}
                     />
                   </div>
                 </div>

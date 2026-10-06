@@ -301,7 +301,10 @@
 .toggle-slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #cbd5e1;
   transition: .4s;
   border-radius: 34px;
@@ -319,11 +322,11 @@
   border-radius: 50%;
 }
 
-input:checked + .toggle-slider {
+input:checked+.toggle-slider {
   background-color: var(--color-success);
 }
 
-input:checked + .toggle-slider:before {
+input:checked+.toggle-slider:before {
   transform: translateX(24px);
 }
 
@@ -429,6 +432,7 @@ input:checked + .toggle-slider:before {
   border: 1px dashed #cbd5e1;
   color: var(--color-text-gray);
 }
+
 .no-images span {
   font-size: 2rem;
   display: block;
@@ -543,7 +547,8 @@ input:checked + .toggle-slider:before {
   gap: 1rem;
 }
 
-.color-tag, .size-tag {
+.color-tag,
+.size-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -551,13 +556,13 @@ input:checked + .toggle-slider:before {
   border-radius: var(--radius-full);
   font-weight: 600;
   font-size: 0.9rem;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: var(--shadow-sm);
 }
 
 .color-tag {
   color: white;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* If color is light, make text dark */
@@ -567,7 +572,8 @@ input:checked + .toggle-slider:before {
   text-shadow: none;
 }
 
-.color-tag button, .size-tag button {
+.color-tag button,
+.size-tag button {
   background: transparent;
   border: none;
   color: inherit;
@@ -620,7 +626,8 @@ input:checked + .toggle-slider:before {
   font-weight: 700;
   cursor: pointer;
   transition: var(--transition-bounce);
-  margin-left: auto; /* Push to right if alone */
+  margin-left: auto;
+  /* Push to right if alone */
 }
 
 .btn-primary:hover {
@@ -681,7 +688,7 @@ input:checked + .toggle-slider:before {
 .spinner-small {
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(255,255,255,0.3);
+  border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   border-top-color: white;
   animation: spin 1s linear infinite;
@@ -689,22 +696,43 @@ input:checked + .toggle-slider:before {
 
 /* Animations */
 @keyframes slideUpFade {
-  0% { transform: translateY(20px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .7; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: .7;
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* --- Responsive Design --- */
@@ -714,6 +742,7 @@ input:checked + .toggle-slider:before {
   .upload-wrapper {
     max-width: 95%;
   }
+
   .preview-card {
     max-width: 800px;
   }
@@ -724,33 +753,42 @@ input:checked + .toggle-slider:before {
   .upload-container {
     padding: 2rem 1rem;
   }
+
   .upload-header h1 {
     font-size: 2rem;
   }
+
   .preview-card {
     flex-direction: column;
   }
+
   .preview-image {
     width: 100%;
     height: 250px;
   }
+
   .form-grid {
     grid-template-columns: 1fr;
   }
+
   .input-group.full-width {
     grid-column: span 1;
   }
+
   .form-tab {
     padding: 2rem 1.5rem;
   }
+
   .form-actions {
     padding: 1.5rem;
   }
+
   .progress-steps {
     padding: 1rem;
     gap: 1rem;
     justify-content: flex-start;
   }
+
   .step {
     min-width: 80px;
   }
@@ -761,48 +799,66 @@ input:checked + .toggle-slider:before {
   .upload-container {
     padding: 1rem 0.5rem;
   }
+
   .upload-header .header-icon {
     font-size: 2.5rem;
   }
+
   .upload-header h1 {
     font-size: 1.5rem;
   }
+
   .upload-header p {
     font-size: 0.9rem;
   }
+
   .preview-name {
     font-size: 1.25rem;
   }
+
   .preview-current {
     font-size: 1.5rem;
   }
+
   .step-number {
     width: 32px;
     height: 32px;
     font-size: 0.9rem;
   }
+
   .step-label {
     font-size: 0.8rem;
   }
+
   .form-tab {
     padding: 1.5rem 1rem;
   }
+
   .image-preview-grid {
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
   }
+
   .upload-area {
     padding: 2rem 1rem;
   }
-  .add-feature, .add-variant {
+
+  .add-feature,
+  .add-variant {
     flex-direction: column;
   }
-  .add-feature button, .add-variant button {
+
+  .add-feature button,
+  .add-variant button {
     padding: 1rem;
   }
+
   .action-buttons {
     flex-direction: column-reverse;
   }
-  .btn-primary, .btn-secondary, .btn-success {
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-success {
     width: 100%;
     justify-content: center;
     margin: 0;

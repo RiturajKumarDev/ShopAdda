@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import { getUserFromServer } from '../services/authService';
-import { 
-  FiHome, FiBox, FiShoppingBag, FiUsers, FiSettings, 
-  FiSearch, FiBell, FiMenu, FiTrendingUp, FiDollarSign, FiLogOut 
+import {
+  FiHome, FiBox, FiShoppingBag, FiUsers, FiSettings,
+  FiSearch, FiBell, FiMenu, FiTrendingUp, FiDollarSign, FiLogOut
 } from 'react-icons/fi';
 import './VendorDashboard.css';
 import VendorProducts from './VendorProducts';
@@ -37,7 +37,7 @@ const VendorDashboard = () => {
         if (response.ok) {
           const data = await response.json();
           setUserData(data);
-          
+
           // Fetch stats if in Dashboard tab
           if (activeTab === 'Dashboard') {
             const statsRes = await getVendorDashboardStats();
@@ -73,10 +73,10 @@ const VendorDashboard = () => {
           <h2>Vendor<span>Hub</span></h2>
         </div>
         <ul className="vd-sidebar-menu">
-          <li className={activeTab === 'Dashboard' ? 'active' : ''} onClick={() => setActiveTab('Dashboard')} style={{cursor: 'pointer'}}><FiHome /> <span>Dashboard</span></li>
-          <li className={activeTab === 'Products' ? 'active' : ''} onClick={() => setActiveTab('Products')} style={{cursor: 'pointer'}}><FiBox /> <span>Products</span></li>
-          <li className={activeTab === 'Orders' ? 'active' : ''} onClick={() => setActiveTab('Orders')} style={{cursor: 'pointer'}}><FiShoppingBag /> <span>Orders</span></li>
-          <li className={activeTab === 'Customers' ? 'active' : ''} onClick={() => setActiveTab('Customers')} style={{cursor: 'pointer'}}><FiUsers /> <span>Customers</span></li>
+          <li className={activeTab === 'Dashboard' ? 'active' : ''} onClick={() => setActiveTab('Dashboard')} style={{ cursor: 'pointer' }}><FiHome /> <span>Dashboard</span></li>
+          <li className={activeTab === 'Products' ? 'active' : ''} onClick={() => setActiveTab('Products')} style={{ cursor: 'pointer' }}><FiBox /> <span>Products</span></li>
+          <li className={activeTab === 'Orders' ? 'active' : ''} onClick={() => setActiveTab('Orders')} style={{ cursor: 'pointer' }}><FiShoppingBag /> <span>Orders</span></li>
+          <li className={activeTab === 'Customers' ? 'active' : ''} onClick={() => setActiveTab('Customers')} style={{ cursor: 'pointer' }}><FiUsers /> <span>Customers</span></li>
           <li onClick={handleLogout} className="vd-logout-btn"><FiLogOut /> <span>Logout</span></li>
         </ul>
       </aside>
@@ -117,89 +117,89 @@ const VendorDashboard = () => {
                 <p>Here's what's happening with your store today.</p>
               </div>
 
-          {/* Stats Cards */}
-          <div className="vd-stats-grid">
-            <div className="vd-stat-card">
-              <div className="vd-stat-icon blue">
-                <FiDollarSign />
+              {/* Stats Cards */}
+              <div className="vd-stats-grid">
+                <div className="vd-stat-card">
+                  <div className="vd-stat-icon blue">
+                    <FiDollarSign />
+                  </div>
+                  <div className="vd-stat-details">
+                    <p>Total Revenue</p>
+                    <h3>₹{dashboardStats.totalRevenue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</h3>
+                    <span className="vd-trend positive"><FiTrendingUp /> +12.5%</span>
+                  </div>
+                </div>
+                <div className="vd-stat-card">
+                  <div className="vd-stat-icon purple">
+                    <FiShoppingBag />
+                  </div>
+                  <div className="vd-stat-details">
+                    <p>Total Orders</p>
+                    <h3>{dashboardStats.totalOrders}</h3>
+                    <span className="vd-trend positive"><FiTrendingUp /> +5.2%</span>
+                  </div>
+                </div>
+                <div className="vd-stat-card">
+                  <div className="vd-stat-icon orange">
+                    <FiBox />
+                  </div>
+                  <div className="vd-stat-details">
+                    <p>Total Products</p>
+                    <h3>{dashboardStats.totalProducts}</h3>
+                    <span className="vd-trend neutral">-</span>
+                  </div>
+                </div>
+                <div className="vd-stat-card">
+                  <div className="vd-stat-icon green">
+                    <FiUsers />
+                  </div>
+                  <div className="vd-stat-details">
+                    <p>Total Customers</p>
+                    <h3>{dashboardStats.totalCustomers}</h3>
+                    <span className="vd-trend positive"><FiTrendingUp /> +18.7%</span>
+                  </div>
+                </div>
               </div>
-              <div className="vd-stat-details">
-                <p>Total Revenue</p>
-                <h3>₹{dashboardStats.totalRevenue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</h3>
-                <span className="vd-trend positive"><FiTrendingUp /> +12.5%</span>
-              </div>
-            </div>
-            <div className="vd-stat-card">
-              <div className="vd-stat-icon purple">
-                <FiShoppingBag />
-              </div>
-              <div className="vd-stat-details">
-                <p>Total Orders</p>
-                <h3>{dashboardStats.totalOrders}</h3>
-                <span className="vd-trend positive"><FiTrendingUp /> +5.2%</span>
-              </div>
-            </div>
-            <div className="vd-stat-card">
-              <div className="vd-stat-icon orange">
-                <FiBox />
-              </div>
-              <div className="vd-stat-details">
-                <p>Total Products</p>
-                <h3>{dashboardStats.totalProducts}</h3>
-                <span className="vd-trend neutral">-</span>
-              </div>
-            </div>
-            <div className="vd-stat-card">
-              <div className="vd-stat-icon green">
-                <FiUsers />
-              </div>
-              <div className="vd-stat-details">
-                <p>Total Customers</p>
-                <h3>{dashboardStats.totalCustomers}</h3>
-                <span className="vd-trend positive"><FiTrendingUp /> +18.7%</span>
-              </div>
-            </div>
-          </div>
 
-          {/* Recent Orders Table */}
-          <div className="vd-recent-orders">
-            <div className="vd-section-header">
-              <h2>Recent Orders</h2>
-              <button className="vd-btn-outline">View All</button>
-            </div>
-            <div className="vd-table-responsive">
-              <table className="vd-table">
-                <thead>
-                  <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Product</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dashboardStats.recentOrders.length > 0 ? (
-                    dashboardStats.recentOrders.map(order => (
-                      <tr key={order._id}>
-                        <td>#{order._id.substring(order._id.length - 6).toUpperCase()}</td>
-                        <td>{order.userId?.fullName || 'Guest User'}</td>
-                        <td>{order.name}</td>
-                        <td>{new Date(order.orderDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                        <td><span className={`vd-status ${order.status.toLowerCase()}`}>{order.status}</span></td>
-                        <td>₹{(order.price * (order.quantity || 1)).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              {/* Recent Orders Table */}
+              <div className="vd-recent-orders">
+                <div className="vd-section-header">
+                  <h2>Recent Orders</h2>
+                  <button className="vd-btn-outline">View All</button>
+                </div>
+                <div className="vd-table-responsive">
+                  <table className="vd-table">
+                    <thead>
+                      <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Amount</th>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="6" style={{ textAlign: 'center', padding: '2rem' }}>No recent orders found.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                    </thead>
+                    <tbody>
+                      {dashboardStats.recentOrders.length > 0 ? (
+                        dashboardStats.recentOrders.map(order => (
+                          <tr key={order._id}>
+                            <td>#{order._id.substring(order._id.length - 6).toUpperCase()}</td>
+                            <td>{order.userId?.fullName || 'Guest User'}</td>
+                            <td>{order.name}</td>
+                            <td>{new Date(order.orderDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                            <td><span className={`vd-status ${order.status.toLowerCase()}`}>{order.status}</span></td>
+                            <td>₹{(order.price * (order.quantity || 1)).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6" style={{ textAlign: 'center', padding: '2rem' }}>No recent orders found.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </>
           )}
 

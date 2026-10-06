@@ -31,9 +31,9 @@ const AdminVendors = () => {
 
   const filteredVendors = users.filter(user => {
     if (user.role !== 'Vendor') return false;
-    const matchesSearch = (user.fullName || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          (user.businessName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          (user.email || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (user.fullName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.businessName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.email || '').toLowerCase().includes(searchTerm.toLowerCase());
     return matchesSearch;
   });
 
@@ -66,7 +66,7 @@ const AdminVendors = () => {
   };
 
   const getRoleColor = (role) => {
-    switch(role) {
+    switch (role) {
       case 'Admin': return 'role-admin';
       case 'Vendor': return 'role-vendor';
       default: return 'role-customer';
@@ -101,11 +101,11 @@ const AdminVendors = () => {
       u.approved !== false ? 'Active' : 'Pending',
       u.joinDate ? new Date(u.joinDate).toLocaleDateString() : 'N/A'
     ]);
-    
-    let csvContent = "data:text/csv;charset=utf-8," 
+
+    let csvContent = "data:text/csv;charset=utf-8,"
       + headers.join(",") + "\n"
       + rows.map(e => e.join(",")).join("\n");
-      
+
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -125,9 +125,9 @@ const AdminVendors = () => {
         <div className="users-actions">
           <div className="search-box">
             <FiSearch className="search-icon" />
-            <input 
-              type="text" 
-              placeholder="Search vendors..." 
+            <input
+              type="text"
+              placeholder="Search vendors..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -177,12 +177,12 @@ const AdminVendors = () => {
                       </td>
                       <td>
                         <span className="vendor-business-name">
-                          {user.businessName || <span style={{color: '#71717a'}}>N/A</span>}
+                          {user.businessName || <span style={{ color: '#71717a' }}>N/A</span>}
                         </span>
                       </td>
                       <td>
                         <span className="vendor-gst">
-                          {user.gstNumber || <span style={{color: '#71717a'}}>N/A</span>}
+                          {user.gstNumber || <span style={{ color: '#71717a' }}>N/A</span>}
                         </span>
                       </td>
                       <td>
@@ -229,28 +229,28 @@ const AdminVendors = () => {
             <form onSubmit={handleEditSubmit}>
               <div className="admin-form-group">
                 <label>Full Name</label>
-                <input type="text" value={editForm.fullName} onChange={e => setEditForm({...editForm, fullName: e.target.value})} required />
+                <input type="text" value={editForm.fullName} onChange={e => setEditForm({ ...editForm, fullName: e.target.value })} required />
               </div>
               <div className="admin-form-group">
                 <label>Email</label>
-                <input type="email" value={editForm.email} onChange={e => setEditForm({...editForm, email: e.target.value})} required />
+                <input type="email" value={editForm.email} onChange={e => setEditForm({ ...editForm, email: e.target.value })} required />
               </div>
               <div className="admin-form-group">
                 <label>Business Name</label>
-                <input type="text" value={editForm.businessName} onChange={e => setEditForm({...editForm, businessName: e.target.value})} />
+                <input type="text" value={editForm.businessName} onChange={e => setEditForm({ ...editForm, businessName: e.target.value })} />
               </div>
               <div className="admin-form-group">
                 <label>GST Number</label>
-                <input type="text" value={editForm.gstNumber} onChange={e => setEditForm({...editForm, gstNumber: e.target.value})} />
+                <input type="text" value={editForm.gstNumber} onChange={e => setEditForm({ ...editForm, gstNumber: e.target.value })} />
               </div>
               <div className="admin-form-group">
                 <label>Status</label>
-                <select value={editForm.approved} onChange={e => setEditForm({...editForm, approved: e.target.value === 'true'})}>
+                <select value={editForm.approved} onChange={e => setEditForm({ ...editForm, approved: e.target.value === 'true' })}>
                   <option value="true">Active (Approved)</option>
                   <option value="false">Pending (Not Approved)</option>
                 </select>
               </div>
-              
+
               <div className="admin-modal-actions">
                 <button type="button" className="admin-btn admin-btn-cancel" onClick={() => setEditingUser(null)}>Cancel</button>
                 <button type="submit" className="admin-btn admin-btn-save">Save Changes</button>

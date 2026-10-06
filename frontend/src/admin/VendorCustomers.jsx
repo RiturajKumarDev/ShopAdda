@@ -28,8 +28,8 @@ const VendorCustomers = () => {
     }
   };
 
-  const filteredCustomers = customers.filter(customer => 
-    (customer.fullName && customer.fullName.toLowerCase().includes(searchTerm.toLowerCase())) || 
+  const filteredCustomers = customers.filter(customer =>
+    (customer.fullName && customer.fullName.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (customer.email && customer.email.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
@@ -39,9 +39,9 @@ const VendorCustomers = () => {
         <h2>Customers</h2>
         <div className="vc-search-box">
           <FiSearch />
-          <input 
-            type="text" 
-            placeholder="Search customers..." 
+          <input
+            type="text"
+            placeholder="Search customers..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -61,7 +61,7 @@ const VendorCustomers = () => {
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan="4" style={{textAlign: 'center', padding: '40px'}}>Loading customers...</td>
+                <td colSpan="4" style={{ textAlign: 'center', padding: '40px' }}>Loading customers...</td>
               </tr>
             ) : filteredCustomers.length > 0 ? (
               filteredCustomers.map(customer => (
@@ -97,7 +97,7 @@ const VendorCustomers = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="4" style={{textAlign: 'center', padding: '40px'}}>No customers found.</td>
+                <td colSpan="4" style={{ textAlign: 'center', padding: '40px' }}>No customers found.</td>
               </tr>
             )}
           </tbody>

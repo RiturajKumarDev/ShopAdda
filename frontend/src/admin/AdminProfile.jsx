@@ -18,7 +18,7 @@ const AdminProfile = ({ initialUser }) => {
           const data = await res.json();
           setUser(prev => ({ ...prev, ...data }));
         }
-      } catch (err) {}
+      } catch (err) { }
     };
     fetchUser();
   }, []);
@@ -78,12 +78,12 @@ const AdminProfile = ({ initialUser }) => {
           </div>
           <h3>{user?.fullName || 'Admin User'}</h3>
           <p>{user?.role || 'Superadmin'}</p>
-          <div style={{width: '100%', height: '1px', background: 'rgba(255,255,255,0.05)', margin: '16px 0'}}></div>
-          <div style={{display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', textAlign: 'left'}}>
-            <div style={{display: 'flex', alignItems: 'center', gap: '12px', color: '#a1a1aa', fontSize: '14px'}}>
+          <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.05)', margin: '16px 0' }}></div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', textAlign: 'left' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#a1a1aa', fontSize: '14px' }}>
               <FiMail /> <span>{user?.email || 'No email set'}</span>
             </div>
-            <div style={{display: 'flex', alignItems: 'center', gap: '12px', color: '#a1a1aa', fontSize: '14px'}}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#a1a1aa', fontSize: '14px' }}>
               <FiPhone /> <span>{user?.mobile || 'No mobile set'}</span>
             </div>
           </div>
@@ -91,7 +91,7 @@ const AdminProfile = ({ initialUser }) => {
 
         {/* Right Column - Forms */}
         <div className="admin-prof-details">
-          
+
           {/* Update Info Form */}
           <div className="admin-prof-section">
             <h2 className="admin-prof-section-title"><FiUser /> Personal Information</h2>
@@ -104,34 +104,34 @@ const AdminProfile = ({ initialUser }) => {
               <div className="admin-prof-form-grid">
                 <div className="admin-prof-form-group">
                   <label>Full Name</label>
-                  <input 
-                    type="text" 
-                    value={user.fullName || ''} 
-                    onChange={e => setUser({...user, fullName: e.target.value})}
+                  <input
+                    type="text"
+                    value={user.fullName || ''}
+                    onChange={e => setUser({ ...user, fullName: e.target.value })}
                     placeholder="Enter your full name"
                   />
                 </div>
                 <div className="admin-prof-form-group">
                   <label>Email Address</label>
-                  <input 
-                    type="email" 
-                    value={user.email || ''} 
-                    onChange={e => setUser({...user, email: e.target.value})}
+                  <input
+                    type="email"
+                    value={user.email || ''}
+                    onChange={e => setUser({ ...user, email: e.target.value })}
                     placeholder="Enter email address"
                   />
                 </div>
                 <div className="admin-prof-form-group">
                   <label>Mobile Number</label>
-                  <input 
-                    type="text" 
-                    value={user.mobile || ''} 
-                    onChange={e => setUser({...user, mobile: e.target.value})}
+                  <input
+                    type="text"
+                    value={user.mobile || ''}
+                    onChange={e => setUser({ ...user, mobile: e.target.value })}
                     placeholder="Enter mobile number"
                   />
                 </div>
               </div>
-              <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '16px'}}>
-                <button type="submit" className="admin-prof-btn-update" style={{width: 'auto'}}>Save Changes</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                <button type="submit" className="admin-prof-btn-update" style={{ width: 'auto' }}>Save Changes</button>
               </div>
             </form>
           </div>
@@ -148,25 +148,25 @@ const AdminProfile = ({ initialUser }) => {
               <div className="admin-prof-form-grid">
                 <div className="admin-prof-form-group">
                   <label>Current Password</label>
-                  <input 
-                    type="password" 
+                  <input
+                    type="password"
                     value={passwords.oldPassword}
-                    onChange={e => setPasswords({...passwords, oldPassword: e.target.value})}
+                    onChange={e => setPasswords({ ...passwords, oldPassword: e.target.value })}
                     placeholder="Enter current password"
                   />
                 </div>
                 <div className="admin-prof-form-group">
                   <label>New Password</label>
-                  <input 
-                    type="password" 
+                  <input
+                    type="password"
                     value={passwords.newPassword}
-                    onChange={e => setPasswords({...passwords, newPassword: e.target.value})}
+                    onChange={e => setPasswords({ ...passwords, newPassword: e.target.value })}
                     placeholder="Enter new password"
                   />
                 </div>
               </div>
-              <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '16px'}}>
-                <button type="submit" className="admin-prof-btn-update" style={{width: 'auto', background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)'}}>Update Password</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                <button type="submit" className="admin-prof-btn-update" style={{ width: 'auto', background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)' }}>Update Password</button>
               </div>
             </form>
           </div>

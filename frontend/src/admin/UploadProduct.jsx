@@ -245,14 +245,14 @@ const UploadProduct = ({ editingProduct = null, onUploadComplete = null }) => {
                 images: uploadedImageUrls
             };
             setUploadProgress(85);
-            
+
             let response;
             if (editingProduct) {
                 response = await updateProductToServer(editingProduct._id, finalProductData);
             } else {
                 response = await uploadProductToServer(finalProductData);
             }
-            
+
             const data = await response.json();
             setUploadProgress(100);
             if (response.ok) {
@@ -482,7 +482,7 @@ const UploadProduct = ({ editingProduct = null, onUploadComplete = null }) => {
                                             />
                                             <span className="toggle-slider"></span>
                                         </label>
-                                        <span style={{display: 'flex', alignItems: 'center'}}>{productData.inStock ? <><FiCheckCircle style={{marginRight: '5px', color: 'var(--color-success)'}}/> In Stock</> : <><FiXCircle style={{marginRight: '5px', color: 'var(--color-error)'}}/> Out of Stock</>}</span>
+                                        <span style={{ display: 'flex', alignItems: 'center' }}>{productData.inStock ? <><FiCheckCircle style={{ marginRight: '5px', color: 'var(--color-success)' }} /> In Stock</> : <><FiXCircle style={{ marginRight: '5px', color: 'var(--color-error)' }} /> Out of Stock</>}</span>
                                     </div>
                                 </div>
                             </div>
@@ -533,7 +533,7 @@ const UploadProduct = ({ editingProduct = null, onUploadComplete = null }) => {
 
                                 {imagePreviews.length === 0 && (
                                     <div className="no-images">
-                                        <span><FiImage style={{fontSize: '2.5rem', color: '#cbd5e1'}} /></span>
+                                        <span><FiImage style={{ fontSize: '2.5rem', color: '#cbd5e1' }} /></span>
                                         <p>No images uploaded yet</p>
                                     </div>
                                 )}
@@ -584,7 +584,7 @@ const UploadProduct = ({ editingProduct = null, onUploadComplete = null }) => {
 
                             {productData.discount > 0 && (
                                 <div className="discount-badge animate-pulse">
-                                    <FiStar style={{marginRight: '5px'}} /> {productData.discount}% OFF - Customers will save ₹{productData.originalPrice - productData.price}!
+                                    <FiStar style={{ marginRight: '5px' }} /> {productData.discount}% OFF - Customers will save ₹{productData.originalPrice - productData.price}!
                                 </div>
                             )}
                         </div>
@@ -608,7 +608,7 @@ const UploadProduct = ({ editingProduct = null, onUploadComplete = null }) => {
                                 <div className="features-list">
                                     {productData.features.map((feature, index) => (
                                         <div key={index} className="feature-tag">
-                                            <span style={{display: 'flex', alignItems: 'center'}}><FiCheck style={{marginRight: '5px', color: 'var(--color-primary)'}}/> {feature}</span>
+                                            <span style={{ display: 'flex', alignItems: 'center' }}><FiCheck style={{ marginRight: '5px', color: 'var(--color-primary)' }} /> {feature}</span>
                                             <button type="button" onClick={() => removeFeature(index)}>✕</button>
                                         </div>
                                     ))}
@@ -616,7 +616,7 @@ const UploadProduct = ({ editingProduct = null, onUploadComplete = null }) => {
 
                                 {productData.features.length === 0 && (
                                     <div className="no-features">
-                                        <span><FiStar style={{fontSize: '2rem', color: '#cbd5e1'}} /></span>
+                                        <span><FiStar style={{ fontSize: '2rem', color: '#cbd5e1' }} /></span>
                                         <p>Add features to highlight your product</p>
                                     </div>
                                 )}
@@ -812,7 +812,7 @@ const UploadProduct = ({ editingProduct = null, onUploadComplete = null }) => {
                                             Uploading {uploadProgress}%
                                         </>
                                     ) : (
-                                        <><FiUploadCloud style={{marginRight: '8px'}}/> Upload Product</>
+                                        <><FiUploadCloud style={{ marginRight: '8px' }} /> Upload Product</>
                                     )}
                                 </button>
                             )}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  FiHome, FiUsers, FiShoppingBag, FiBox, 
-  FiSettings, FiSearch, FiBell, FiMenu, 
+import {
+  FiHome, FiUsers, FiShoppingBag, FiBox,
+  FiSettings, FiSearch, FiBell, FiMenu,
   FiTrendingUp, FiTrendingDown, FiDollarSign,
   FiActivity, FiChevronRight, FiUser
 } from 'react-icons/fi';
@@ -11,13 +11,34 @@ import AdminVendors from './AdminVendors';
 import AdminOrders from './AdminOrders';
 import AdminProfile from './AdminProfile';
 import { getDashboardAnalytics } from '../services/analyticsService';
-import { getUserFromServer } from '../services/authService';
 
 const AdminDashboard = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
   const [activeTab, setActiveTab] = useState('Dashboard');
 
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      if (mobile) {
+        setSidebarOpen(false);
+      } else {
+        setSidebarOpen(true);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+  const handleNavClick = (tab) => {
+    setActiveTab(tab);
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  };
 
   const [analytics, setAnalytics] = useState(null);
   const [adminUser, setAdminUser] = useState(null);
@@ -57,8 +78,13 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-layout">
+      {/* Mobile Overlay */}
+      {isMobile && sidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>
+      )}
+
       {/* Sidebar */}
-      <aside className={`admin-sidebar ${!sidebarOpen ? 'collapsed' : ''}`}>
+      <aside className={`admin-sidebar ${!isMobile && !sidebarOpen ? 'collapsed' : ''} ${isMobile && sidebarOpen ? 'mobile-open' : ''}`}>
         <div className="admin-logo">
           {sidebarOpen ? (
             <>Shop<span>Adda</span></>
@@ -67,40 +93,40 @@ const AdminDashboard = () => {
           )}
         </div>
         <nav className="admin-nav">
-          <a 
+          <a
             className={`admin-nav-item ${activeTab === 'Dashboard' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Dashboard')}
+            onClick={() => handleNavClick('Dashboard')}
           >
             <FiHome className="admin-nav-icon" />
-            {sidebarOpen && <span>Dashboard</span>}
+            {(!isMobile && !sidebarOpen) ? null : <span>Dashboard</span>}
           </a>
-          <a 
+          <a
             className={`admin-nav-item ${activeTab === 'Users' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Users')}
+            onClick={() => handleNavClick('Users')}
           >
             <FiUsers className="admin-nav-icon" />
-            {sidebarOpen && <span>Users</span>}
+            {(!isMobile && !sidebarOpen) ? null : <span>Users</span>}
           </a>
-          <a 
+          <a
             className={`admin-nav-item ${activeTab === 'Vendors' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Vendors')}
+            onClick={() => handleNavClick('Vendors')}
           >
             <FiBox className="admin-nav-icon" />
-            {sidebarOpen && <span>Vendors</span>}
+            {(!isMobile && !sidebarOpen) ? null : <span>Vendors</span>}
           </a>
-          <a 
+          <a
             className={`admin-nav-item ${activeTab === 'Orders' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Orders')}
+            onClick={() => handleNavClick('Orders')}
           >
             <FiShoppingBag className="admin-nav-icon" />
-            {sidebarOpen && <span>Orders</span>}
+            {(!isMobile && !sidebarOpen) ? null : <span>Orders</span>}
           </a>
-          <a 
+          <a
             className={`admin-nav-item ${activeTab === 'Profile' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Profile')}
+            onClick={() => handleNavClick('Profile')}
           >
             <FiUser className="admin-nav-icon" />
-            {sidebarOpen && <span>Profile</span>}
+            {(!isMobile && !sidebarOpen) ? null : <span>Profile</span>}
           </a>
         </nav>
       </aside>
@@ -123,7 +149,7 @@ const AdminDashboard = () => {
             </div>
           </div>
           <div className="topbar-right">
-            <div className="admin-profile" onClick={() => setActiveTab('Profile')} title="Go to Profile">
+            <div className="admin-profile" onClick={() => handleNavClick('Profile')} title="Go to Profile">
               <div className="admin-avatar" style={{
                 width: '40px',
                 height: '40px',
@@ -171,7 +197,7 @@ const AdminDashboard = () => {
                     <FiTrendingUp /> Real-time
                   </div>
                 </div>
-                
+
                 <div className="stat-card">
                   <div className="stat-icon-wrapper icon-blue">
                     <FiUsers />
@@ -182,7 +208,7 @@ const AdminDashboard = () => {
                     <FiTrendingUp /> Platform wide
                   </div>
                 </div>
-                
+
                 <div className="stat-card">
                   <div className="stat-icon-wrapper icon-emerald">
                     <FiBox />
@@ -193,7 +219,7 @@ const AdminDashboard = () => {
                     <FiTrendingUp /> Sellers
                   </div>
                 </div>
-                
+
                 <div className="stat-card">
                   <div className="stat-icon-wrapper icon-rose">
                     <FiShoppingBag />
@@ -213,7 +239,7 @@ const AdminDashboard = () => {
                   <div className="panel-header">
                     <h2 className="panel-title">Revenue Analytics</h2>
                     <button className="panel-action">
-                      View Full Report <FiChevronRight />
+                      <span className="action-text">View Full Report</span> <FiChevronRight />
                     </button>
                   </div>
                   <div className="mock-chart">
@@ -234,10 +260,11 @@ const AdminDashboard = () => {
                   <div className="panel-header">
                     <h2 className="panel-title">Recent Vendors</h2>
                     <button className="panel-action">
-                      See All <FiChevronRight />
+                      <span className="action-text">See All</span> <FiChevronRight />
                     </button>
                   </div>
-                  <table className="modern-table">
+                  <div className="table-responsive">
+                    <table className="modern-table">
                     <thead>
                       <tr>
                         <th>Vendor</th>
@@ -267,11 +294,12 @@ const AdminDashboard = () => {
                       ))}
                       {(!analytics?.recentVendors || analytics.recentVendors.length === 0) && (
                         <tr>
-                          <td colSpan="2" style={{textAlign: 'center', padding: '1rem', color: '#a1a1aa'}}>No recent vendors</td>
+                          <td colSpan="2" style={{ textAlign: 'center', padding: '1rem', color: '#a1a1aa' }}>No recent vendors</td>
                         </tr>
                       )}
                     </tbody>
                   </table>
+                  </div>
                 </div>
               </div>
             </>
