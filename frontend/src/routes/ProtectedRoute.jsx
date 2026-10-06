@@ -13,7 +13,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   // 2. Determine user's role
-  const userRole = user.role || (user.user && user.user.role) || (user.data && user.data.role) || 'User';
+  const userRole = user.role || (user.user && user.user.role) || (user.data && user.data.role) || 'Customer';
 
   // 3. Role check
   if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(userRole)) {

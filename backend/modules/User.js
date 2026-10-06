@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const UserType = {
     ADMIN: "Admin",
     VENDOR: "Vendor",
-    USER: "User",
+    CUSTOMER: "Customer",
 }
 
 const UserSchema = new mongoose.Schema(

@@ -45,3 +45,13 @@ export const updateOrderStatusToServer = async (orderId, status) => {
     });
     return response;
 }
+
+export const getAllOrdersFromServer = async () => {
+    const response = await fetch(`${BASE_URL}order/getAllOrders`, {
+        method: "GET",
+        headers: {
+            "Authorization": getToken(),
+        },
+    });
+    return response;
+}

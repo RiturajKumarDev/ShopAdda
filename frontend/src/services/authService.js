@@ -57,6 +57,28 @@ export const getAllUsersFromServer = async () => {
     return response;
 }
 
+export const deleteUserFromServer = async (userId) => {
+    const response = await fetch(`${BASE_URL}user/deleteUser/${userId}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": getToken(),
+        },
+    });
+    return response;
+}
+
+export const updateUserByAdminToServer = async (userId, data) => {
+    const response = await fetch(`${BASE_URL}user/admin-update-user/${userId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": getToken(),
+        },
+        body: JSON.stringify(data),
+    });
+    return response;
+}
+
 export const updateUserToServer = async (user) => {
     const response = await fetch(`${BASE_URL}user/update`, {
         method: "PUT",

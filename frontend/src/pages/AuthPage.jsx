@@ -101,7 +101,7 @@ const AuthPage = () => {
         if (!registerData.dob) newErrors.dob = 'Date of birth is required';
         if (!registerData.gender) newErrors.gender = 'Gender is required';
         if (!registerData.role) newErrors.role = 'Please select a role type';
-        else if (!["Vendor", "User"].includes(registerData.role)) newErrors.role = 'Invalid role type';
+        else if (!["Vendor", "Customer"].includes(registerData.role)) newErrors.role = 'Invalid role type';
         
         if (registerData.role === 'Vendor') {
             if (!registerData.businessName) newErrors.businessName = 'Business Name is required';
@@ -464,7 +464,7 @@ const AuthPage = () => {
                                     >
                                         <option value="">Select Role</option>
                                         <option value="Vendor">Vendor</option>
-                                        <option value="User">User</option>
+                                        <option value="Customer">Customer</option>
                                     </select>
                                     <label className="input-label">Role</label>
                                     <div className="input-border"></div>

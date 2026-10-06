@@ -50,8 +50,8 @@ exports.register = [
     check("role")
         .notEmpty()
         .withMessage("Please select a role type")
-        .isIn(["Vendor", "User"])
-        .withMessage("Invalud role type"),
+        .isIn(["Vendor", "Customer"])
+        .withMessage("Invalid role type"),
     check('businessName')
         .if((value, { req }) => req.body.role === 'Vendor')
         .notEmpty()
@@ -266,9 +266,51 @@ exports.changePassword = async (req, res, next) => {
 
 exports.getAllUsers = async (req, res, next) => {
     try {
-        const users = await User.find({}, '-password'); // Exclude passwords
+        // Use .lean() to skip Mongoose object hydration (massively improves query speed for large collections)
+        const users = await User.find({}, '-password').sort({ _id: -1 }).lean();
         res.status(200).json(users);
     } catch (error) {
         res.status(500).json({ errors: "Server Error" });
+    }
+};
+
+exports.deleteUser = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findByIdAndDelete(userId);
+        if (!user) {
+            return res.status(404).json({ errors: ["User not found"] });
+        }
+        res.status(200).json({ message: "User deleted successfully" });
+    } catch (err) {
+        res.status(500).json({ errors: ["Server error"] });
+    }
+};
+
+exports.updateUserByAdmin = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        const { fullName, email, mobile, role, approved, businessName, gstNumber } = req.body;
+        
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ errors: ["User not found"] });
+        }
+
+        if (fullName !== undefined) user.fullName = fullName;
+        if (email !== undefined) user.email = email;
+        if (mobile !== undefined) user.mobile = mobile;
+        if (role !== undefined) user.role = role;
+        if (approved !== undefined) user.approved = approved;
+        if (businessName !== undefined) user.businessName = businessName;
+        if (gstNumber !== undefined) user.gstNumber = gstNumber;
+
+        const updatedUser = await user.save();
+        res.status(200).json({ message: "User updated successfully", user: updatedUser });
+    } catch (err) {
+        if (err.code === 11000) {
+            return res.status(409).json({ errors: ["Email or mobile already exists"] });
+        }
+        res.status(500).json({ errors: ["Server error"] });
     }
 };

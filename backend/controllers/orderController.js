@@ -71,3 +71,15 @@ exports.updateOrderStatus = async (req, res, next) => {
         res.status(500).json({ errors: "Server Error" + err.message });
     }
 };
+
+exports.getAllOrders = async (req, res, next) => {
+    Order.find()
+        .sort({ _id: -1 })
+        .lean()
+        .then(orders => {
+            res.status(200).json(orders);
+        })
+        .catch(err => {
+            res.status(500).json({ errors: "Server Error" + err.errmsg });
+        })
+};

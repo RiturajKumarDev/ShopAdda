@@ -13,6 +13,7 @@ const { paymentRouter } = require("./routes/paymentRouter");
 const { orderRouter } = require("./routes/orderRouter");
 const { imageRouter } = require("./routes/imageRouter");
 const { vendorRouter } = require("./routes/vendorRouter");
+const { analyticsRouter } = require("./routes/analyticsRouter");
 const { verify_token } = require("./services/authService");
 
 const app = express();
@@ -33,6 +34,7 @@ app.use("/api/payment", verify_token, paymentRouter);
 app.use("/api/order", verify_token, orderRouter);
 app.use("/api/image", imageRouter);
 app.use("/api/vendor", vendorRouter);
+app.use("/api/analytics", analyticsRouter);
 
 
 app.use((req, res) => {
